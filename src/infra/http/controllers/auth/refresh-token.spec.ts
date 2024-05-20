@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
+import { createAndAuthenticateUser } from '@/infra/utils/test/create-and-authenticate-user'
 import { app } from '@/main'
 
 import { FastifyAdapter } from '../../fastify/fastify-adapter'
@@ -18,17 +19,22 @@ describe('Refresh Token (e2e)', () => {
   })
 
   it('should be able to refresh a token', async () => {
-    await request(app.instance.server).post('/user').send({
-      name: 'TESTE USER',
-      email: 'teste@gmail.com',
-      password: '123456',
-      role: 'ADMIN',
-    })
+    const token = await createAndAuthenticateUser(app)
+
+    await request(app.instance.server)
+      .post('/user')
+      .send({
+        name: 'TESTE USER',
+        email: 'teste2@gmail.com',
+        password: '123456',
+        role: 'ADMIN',
+      })
+      .set('Authorization', `Bearer ${token}`)
 
     const authResponse = await request(app.instance.server)
       .post('/session')
       .send({
-        email: 'teste@gmail.com',
+        email: 'teste2@gmail.com',
         password: '123456',
       })
 

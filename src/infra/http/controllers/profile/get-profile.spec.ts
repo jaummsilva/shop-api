@@ -9,8 +9,8 @@ import type { HttpServer } from '../../http-server'
 
 let httpServer: HttpServer
 
-describe('Register (e2e)', () => {
-  beforeAll(() => {
+describe('Get Profile (e2e)', () => {
+  beforeAll(async () => {
     httpServer = new FastifyAdapter()
   })
 
@@ -18,19 +18,19 @@ describe('Register (e2e)', () => {
     httpServer.close()
   })
 
-  it('should be able to register', async () => {
+  it('should get user profile', async () => {
     const token = await createAndAuthenticateUser(app)
 
-    const response = await request(app.instance.server)
-      .post('/user')
-      .send({
-        name: 'TESTE USER',
-        email: 'teste2@gmail.com',
-        password: '123456',
-        role: 'ADMIN',
-      })
+    const result = await request(app.instance.server)
+      .get('/profile')
       .set('Authorization', `Bearer ${token}`)
 
-    expect(response.statusCode).toEqual(201)
+    expect(result.statusCode).toEqual(200)
+    expect(result.body.user).toEqual(
+      expect.objectContaining({
+        email: 'teste@gmail.com',
+        name: 'Admin User',
+      }),
+    )
   })
 })
