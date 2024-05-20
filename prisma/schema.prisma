@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum StatusCart {
+  ABERTO
+  FECHADO
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  role          Role      @default(MEMBER)
+  password_hash String
+  created_at    DateTime  @default(now())
+  orders        Order[]
+  cart          Cart?
+
+  @@map("users")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id         String     @id @default(uuid())
+  created_at DateTime   @default(now())
+  price_total      Decimal
+  user       User       @relation(fields: [user_id], references: [id])
+  user_id    String
+  orderItems OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String    @id @default(uuid())
+  order      Order     @relation(fields: [order_id], references: [id])
+  order_id   String
+  product    Product   @relation(fields: [product_id], references: [id])
+  product_id String
+  quantity   Int
+  price      Decimal
+
+  @@map("order_items")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  user      User       @relation(fields: [user_id], references: [id])
+  user_id   String     @unique
+  cartItems CartItem[]
+  status StatusCart @default(ABERTO)
+
+  @@map("carts")
+}
+
+model CartItem {
+  id         String    @id @default(uuid())
+  cart       Cart      @relation(fields: [cart_id], references: [id])
+  cart_id    String
+  product    Product   @relation(fields: [product_id], references: [id])
+  product_id String
+  quantity   Int
+
+  @@map("cart_items")
+}
