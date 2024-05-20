@@ -18,71 +18,83 @@ enum StatusCart {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  role          Role      @default(MEMBER)
-  password_hash String
-  created_at    DateTime  @default(now())
-  orders        Order[]
-  cart          Cart?
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  role         Role     @default(MEMBER)
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  orders       Order[]
+  cart         Cart?
 
   @@map("users")
 }
 
 model Product {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  price       Decimal
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  orderItems  OrderItem[]
-  cartItems   CartItem[]
+  id            String          @id @default(uuid())
+  name          String
+  description   String?
+  price         Decimal
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  productImages ProductImages[]
 
   @@map("products")
 }
 
+model ProductImages {
+  id        String  @id @default(uuid())
+  name      String
+  path      String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  @@map("product_images")
+}
+
 model Order {
-  id         String     @id @default(uuid())
-  created_at DateTime   @default(now())
-  price_total      Decimal
-  user       User       @relation(fields: [user_id], references: [id])
-  user_id    String
+  id         String      @id @default(uuid())
+  createdAt  DateTime    @default(now()) @map("created_at")
+  totalPrice Float       @map("price_total")
+  user       User        @relation(fields: [userId], references: [id])
+  userId     String      @map("user_id")
   orderItems OrderItem[]
 
   @@map("orders")
 }
 
 model OrderItem {
-  id         String    @id @default(uuid())
-  order      Order     @relation(fields: [order_id], references: [id])
-  order_id   String
-  product    Product   @relation(fields: [product_id], references: [id])
-  product_id String
-  quantity   Int
-  price      Decimal
+  id           String  @id @default(uuid())
+  order        Order   @relation(fields: [orderId], references: [id])
+  orderId      String  @map("order_id")
+  product      Product @relation(fields: [productId], references: [id])
+  productId    String  @map("product_id")
+  quantity     Int
+  productPrice Float   @map("product_price")
+  totalPrice   Float   @map("price_total")
 
   @@map("order_items")
 }
 
 model Cart {
   id        String     @id @default(uuid())
-  user      User       @relation(fields: [user_id], references: [id])
-  user_id   String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique @map("user_id")
   cartItems CartItem[]
-  status StatusCart @default(ABERTO)
+  status    StatusCart @default(ABERTO)
 
   @@map("carts")
 }
 
 model CartItem {
-  id         String    @id @default(uuid())
-  cart       Cart      @relation(fields: [cart_id], references: [id])
-  cart_id    String
-  product    Product   @relation(fields: [product_id], references: [id])
-  product_id String
-  quantity   Int
+  id        String  @id @default(uuid())
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    String  @map("cart_id")
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+  quantity  Int
 
   @@map("cart_items")
 }

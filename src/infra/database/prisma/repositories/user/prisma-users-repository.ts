@@ -11,8 +11,8 @@ export class PrismaUsersRepository implements UsersRepository {
         role: data.role,
         email: data.email,
         name: data.name,
-        password_hash: data.password_hash,
-        created_at: data.created_at,
+        passwordHash: data.passwordHash,
+        createdAt: data.createdAt,
         id: data.id.toString(),
       },
     })
@@ -61,7 +61,7 @@ export class PrismaUsersRepository implements UsersRepository {
       data: {
         email: data.email,
         name: data.name,
-        password_hash: data.password_hash,
+        passwordHash: data.passwordHash,
       },
     })
     return PrismaUserMapper.toDomain(user)

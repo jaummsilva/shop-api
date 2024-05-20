@@ -4,8 +4,8 @@ import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 type UserProps = {
   name: string
   email: string
-  password_hash: string
-  created_at?: Date
+  passwordHash: string
+  createdAt?: Date
   role: 'ADMIN' | 'MEMBER'
 }
 
@@ -18,7 +18,7 @@ export class User extends Entity<UserProps> {
     const user = new User(
       {
         ...props,
-        created_at: props.created_at ?? new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )
@@ -30,16 +30,16 @@ export class User extends Entity<UserProps> {
     return this.props.email
   }
 
-  get password_hash() {
-    return this.props.password_hash
+  get passwordHash() {
+    return this.props.passwordHash
   }
 
   get name() {
     return this.props.name
   }
 
-  get created_at() {
-    return this.props.created_at
+  get createdAt() {
+    return this.props.createdAt
   }
 
   get role() {
@@ -50,8 +50,8 @@ export class User extends Entity<UserProps> {
     this.props.email = email
   }
 
-  set password_hash(password_hash: string) {
-    this.props.password_hash = password_hash
+  set passwordHash(passwordHash: string) {
+    this.props.passwordHash = passwordHash
   }
 
   set name(name: string) {

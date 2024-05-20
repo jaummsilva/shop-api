@@ -8,9 +8,9 @@ export class PrismaUserMapper {
     return DomainUser.create(
       {
         email: raw.email,
-        password_hash: raw.password_hash,
+        passwordHash: raw.passwordHash,
         name: raw.name,
-        created_at: raw.created_at,
+        createdAt: raw.createdAt,
         role: raw.role,
       },
       new UniqueEntityID(raw.id),
@@ -21,9 +21,9 @@ export class PrismaUserMapper {
     return {
       id: user.id.toString(),
       email: user.email,
-      password_hash: user.password_hash,
+      passwordHash: user.passwordHash,
       name: user.name,
-      created_at: user.created_at ?? new Date(),
+      createdAt: user.createdAt ?? new Date(),
       role: user.role,
     }
   }

@@ -46,7 +46,7 @@ describe('User Register Use Case', () => {
     })
 
     if (result.isRight()) {
-      const passwordHash = result.value.user.password_hash
+      const passwordHash = result.value.user.passwordHash
 
       const isPasswordCorrectlyHashed = await hashComparer.compare(
         'TESTE123',

@@ -37,7 +37,7 @@ export class UserRegisterUseCase {
       return left(new UserAlreadyExistsError())
     }
 
-    const user = User.create({ name, email, password_hash: passwordHash, role })
+    const user = User.create({ name, email, passwordHash, role })
 
     await this.usersRepository.create(user)
 

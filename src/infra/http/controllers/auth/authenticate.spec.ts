@@ -31,8 +31,41 @@ describe('Authenticate (e2e)', () => {
     })
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body).toEqual({
-      token: expect.any(String),
-    })
+
+    // Accessing tokens from cookies
+    const cookies = response.get('Set-Cookie') ?? ['']
+    const token = extractTokenFromCookies(cookies, 'token')
+    const refreshToken = extractTokenFromCookies(cookies, 'refreshToken')
+
+    // Expect statements for tokens
+    expect(token).toBeDefined()
+    expect(refreshToken).toBeDefined()
+    expect(typeof token).toBe('string')
+    expect(typeof refreshToken).toBe('string')
   })
 })
+
+function extractTokenFromCookies(
+  cookies: string[] | undefined,
+  cookieName: string,
+): string | undefined {
+  if (!cookies) {
+    return undefined
+  }
+
+  // Find the cookie with the specified name
+  const cookie = cookies.find((c) => c.includes(`${cookieName}=`))
+
+  if (!cookie) {
+    return undefined
+  }
+
+  // Extract the token from the cookie
+  const match = cookie.match(new RegExp(`${cookieName}=([^;]+)`))
+
+  if (match) {
+    return match[1]
+  }
+
+  return undefined
+}

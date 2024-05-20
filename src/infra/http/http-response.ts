@@ -13,4 +13,5 @@ export interface HttpResponse {
   send(): this
   status(code: number): this
   setCookie(name: string, value: string, options?: CookieOptions): this
+  redirect(path: string): this
 }

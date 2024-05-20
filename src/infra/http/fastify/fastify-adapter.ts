@@ -24,7 +24,10 @@ export class FastifyAdapter implements HttpServer {
   }
 
   start(port: number, callback: () => void) {
-    this.app.register(fastifyCors, {})
+    this.app.register(fastifyCors, {
+      origin: 'http://localhost:5173',
+      credentials: true,
+    })
 
     this.app.register(fastifyJwt, {
       secret: env.JWT_SECRET,

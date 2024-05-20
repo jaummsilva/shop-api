@@ -28,4 +28,9 @@ export class FastifyHttpResponseAdapter implements HttpResponse {
     this.response.setCookie(name, value, options)
     return this
   }
+
+  redirect(path: string): this {
+    this.response.redirect(path)
+    return this
+  }
 }

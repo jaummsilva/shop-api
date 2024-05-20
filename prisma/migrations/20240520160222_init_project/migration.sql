@@ -29,10 +29,20 @@ CREATE TABLE "products" (
 );
 
 -- CreateTable
+CREATE TABLE "product_images" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "path" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+
+    CONSTRAINT "product_images_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "orders" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "price_total" DECIMAL(65,30) NOT NULL,
+    "price_total" DOUBLE PRECISION NOT NULL,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
@@ -44,7 +54,8 @@ CREATE TABLE "order_items" (
     "order_id" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "price" DECIMAL(65,30) NOT NULL,
+    "product_price" DOUBLE PRECISION NOT NULL,
+    "price_total" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "order_items_pkey" PRIMARY KEY ("id")
 );
@@ -73,6 +84,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "carts_user_id_key" ON "carts"("user_id");
+
+-- AddForeignKey
+ALTER TABLE "product_images" ADD CONSTRAINT "product_images_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "orders" ADD CONSTRAINT "orders_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

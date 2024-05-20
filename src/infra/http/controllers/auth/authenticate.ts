@@ -1,7 +1,6 @@
-import { fromError } from 'zod-validation-error'
-
 import type { Validation } from '@/core/validation/validation'
 import { UserNotExistsError } from '@/domain/application/use-cases/errors/user/user-not-exists'
+import { env } from '@/infra/env'
 
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
@@ -42,6 +41,12 @@ export class AuthenticateController {
         )
 
         return reply
+          .setCookie('token', token, {
+            path: '/',
+            secure: true,
+            sameSite: true,
+            httpOnly: true,
+          })
           .setCookie('refreshToken', refreshToken, {
             path: '/',
             secure: true,
@@ -49,13 +54,11 @@ export class AuthenticateController {
             httpOnly: true,
           })
           .status(200)
-          .json({ token })
+          .redirect(env.FRONTEND_URL)
       }
     } catch (error) {
-      const validationError = fromError(error)
-
       return reply.status(400).json({
-        message: validationError.details,
+        message: error,
       })
     }
   }

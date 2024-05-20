@@ -1,6 +1,6 @@
 import type { HashComparer } from '@/core/cryptography/hash-comparer'
 import { type Either, left, right } from '@/core/either'
-import type { UsersRepository } from '@/domain/application/repositories/users-repository'
+import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
 import type { User } from '@/domain/enterprise/user'
 
 import { UserNotExistsError } from '../../errors/user/user-not-exists'
@@ -30,7 +30,7 @@ export class AuthenticateUseCase {
 
     const doesPasswordMatches = await this.hashCompare.compare(
       password,
-      user.password_hash,
+      user.passwordHash,
     )
 
     if (!doesPasswordMatches) {
