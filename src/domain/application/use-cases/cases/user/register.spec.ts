@@ -8,32 +8,43 @@ import type { HashGenerator } from '@/core/cryptography/hash-generator'
 import { UserAlreadyExistsError } from '../../errors/user/user-already-exists'
 import { UserRegisterUseCase } from './register'
 
-let inMemoryUsersRepositoryUserRepository: InMemoryUsersRepository
+let inMemoryUsersRepository: InMemoryUsersRepository
 let userRegisterUseCase: UserRegisterUseCase
 let hashComparer: HashComparer
 let hashGenerator: HashGenerator
 
 describe('User Register Use Case', () => {
   beforeEach(() => {
-    inMemoryUsersRepositoryUserRepository = new InMemoryUsersRepository()
+    inMemoryUsersRepository = new InMemoryUsersRepository()
     hashGenerator = new HashAdapter()
     hashComparer = new HashAdapter()
     userRegisterUseCase = new UserRegisterUseCase(
-      inMemoryUsersRepositoryUserRepository,
+      inMemoryUsersRepository,
       hashGenerator,
     )
   })
 
   it('should be able to register', async () => {
+    const birthdate = new Date('1990-01-01')
+
     const result = await userRegisterUseCase.execute({
       email: 'teste@gmail.com',
       password: 'TESTE123',
       name: 'João',
       role: 'ADMIN',
+      phone: '123456789',
+      photoPath: '/path/to/photo.jpg',
+      birthdate,
     })
 
     if (result.isRight()) {
       expect(result.value.user.id.toString()).toEqual(expect.any(String))
+      expect(result.value.user.email).toEqual('teste@gmail.com')
+      expect(result.value.user.name).toEqual('João')
+      expect(result.value.user.role).toEqual('ADMIN')
+      expect(result.value.user.phone).toEqual('123456789')
+      expect(result.value.user.photoPath).toEqual('/path/to/photo.jpg')
+      expect(result.value.user.birthdate).toEqual(birthdate)
     }
   })
 
@@ -43,6 +54,9 @@ describe('User Register Use Case', () => {
       password: 'TESTE123',
       name: 'João',
       role: 'ADMIN',
+      phone: '123456789',
+      photoPath: '/path/to/photo.jpg',
+      birthdate: new Date('1990-01-01'),
     })
 
     if (result.isRight()) {
@@ -63,6 +77,9 @@ describe('User Register Use Case', () => {
       password: 'TESTE123',
       name: 'João',
       role: 'ADMIN',
+      phone: '123456789',
+      photoPath: '/path/to/photo.jpg',
+      birthdate: new Date('1990-01-01'),
     })
 
     const duplicateRegistrationResult = await userRegisterUseCase.execute({
@@ -70,6 +87,9 @@ describe('User Register Use Case', () => {
       password: 'TESTE123',
       name: 'João',
       role: 'ADMIN',
+      phone: '123456789',
+      photoPath: '/path/to/photo.jpg',
+      birthdate: new Date('1990-01-01'),
     })
 
     expect(

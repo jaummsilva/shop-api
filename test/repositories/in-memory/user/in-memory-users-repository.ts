@@ -1,4 +1,8 @@
-import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
+import type {
+  FindManyParams,
+  UsersRepository,
+} from "@/domain/application/repositories/users-repository'"
+import type { MetaResponse } from '@/domain/application/utils/meta-response'
 import type { User } from '@/domain/enterprise/user'
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -52,5 +56,22 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
 
     return data
+  }
+
+  async findMany(params: FindManyParams) {
+    const { name = '', page = 1 } = params
+
+    const filteredUsers = this.items.filter((item) => item.name.includes(name))
+
+    const totalCount = filteredUsers.length
+    const users = filteredUsers.slice((page - 1) * 10, page * 10)
+
+    const meta: MetaResponse = {
+      pageIndex: page,
+      perPage: 10,
+      totalCount,
+    }
+
+    return { users, meta }
   }
 }

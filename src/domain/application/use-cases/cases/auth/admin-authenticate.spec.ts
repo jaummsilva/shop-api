@@ -32,6 +32,9 @@ describe('Admin Authenticate Use Case', () => {
         email: 'teste@gmail.com',
         passwordHash: await hashGenerator.hash('TESTE123'),
         role: 'ADMIN',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: new Date('1990-01-01'),
       }),
     )
 
@@ -41,6 +44,9 @@ describe('Admin Authenticate Use Case', () => {
         email: 'teste2@gmail.com',
         passwordHash: await hashGenerator.hash('TESTE123'),
         role: 'MEMBER',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: new Date('1990-01-01'),
       }),
     )
 
@@ -72,6 +78,9 @@ describe('Admin Authenticate Use Case', () => {
         email: 'teste5@gmail.com',
         passwordHash: await hashGenerator.hash('TESTE123'),
         role: 'ADMIN',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: new Date('1990-01-01'),
       }),
     )
 
@@ -92,6 +101,9 @@ describe('Admin Authenticate Use Case', () => {
         email: 'teste@gmail.com',
         passwordHash: await hashGenerator.hash('TESTE123'),
         role: 'ADMIN',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: new Date('1990-01-01'),
       }),
     )
 
@@ -101,6 +113,9 @@ describe('Admin Authenticate Use Case', () => {
         email: 'teste2@gmail.com',
         passwordHash: await hashGenerator.hash('TESTE123'),
         role: 'MEMBER',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: new Date('1990-01-01'),
       }),
     )
 

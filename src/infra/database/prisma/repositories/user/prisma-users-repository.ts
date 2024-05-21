@@ -1,4 +1,8 @@
-import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
+import type {
+  FindManyParams,
+  UsersRepository,
+} from "@/domain/application/repositories/users-repository'"
+import type { MetaResponse } from '@/domain/application/utils/meta-response'
 import type { User } from '@/domain/enterprise/user'
 import { prisma } from '@/infra/database/prisma/prisma'
 
@@ -13,7 +17,9 @@ export class PrismaUsersRepository implements UsersRepository {
         name: data.name,
         passwordHash: data.passwordHash,
         createdAt: data.createdAt,
-        id: data.id.toString(),
+        phone: data.phone,
+        photoPath: data.photoPath,
+        birthdate: data.birthdate,
       },
     })
     return PrismaUserMapper.toDomain(user)
@@ -65,5 +71,54 @@ export class PrismaUsersRepository implements UsersRepository {
       },
     })
     return PrismaUserMapper.toDomain(user)
+  }
+
+  async findMany(params: FindManyParams) {
+    const { name = '', page = 1 } = params
+
+    const skip = (page - 1) * 10
+    const take = 10
+
+    const [users, totalCount] = await Promise.all([
+      prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+        skip,
+        take,
+      }),
+      prisma.user.count({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      }),
+    ])
+
+    const meta: MetaResponse = {
+      pageIndex: page || 1,
+      perPage: 10,
+      totalCount,
+    }
+
+    const usersMapped = users.map((user) =>
+      PrismaUserMapper.toDomain({
+        ...user,
+      }),
+    )
+    return { users: usersMapped, meta }
   }
 }

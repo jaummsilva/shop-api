@@ -21,11 +21,15 @@ model User {
   id           String   @id @default(uuid())
   name         String
   email        String   @unique
+  phone        String
   role         Role     @default(MEMBER)
   passwordHash String   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
   orders       Order[]
   cart         Cart?
+  photoPath    String   @map("photo_path")
+  birthdate    DateTime @map("birthdate")
 
   @@map("users")
 }
@@ -45,11 +49,12 @@ model Product {
 }
 
 model ProductImages {
-  id        String  @id @default(uuid())
-  name      String
-  path      String
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @map("product_id")
+  id          String  @id @default(uuid())
+  name        String
+  path        String
+  product     Product @relation(fields: [productId], references: [id])
+  productId   String  @map("product_id")
+  isPrincipal Boolean @map("is_principal")
 
   @@map("product_images")
 }

@@ -9,9 +9,13 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'MEMBER',
     "password_hash" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "photo_path" TEXT NOT NULL,
+    "birthdate" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -34,6 +38,7 @@ CREATE TABLE "product_images" (
     "name" TEXT NOT NULL,
     "path" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
+    "is_principal" BOOLEAN NOT NULL,
 
     CONSTRAINT "product_images_pkey" PRIMARY KEY ("id")
 );

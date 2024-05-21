@@ -12,6 +12,10 @@ export class PrismaUserMapper {
         name: raw.name,
         createdAt: raw.createdAt,
         role: raw.role,
+        birthdate: raw.birthdate,
+        phone: raw.phone,
+        photoPath: raw.photoPath,
+        updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
     )
@@ -25,6 +29,10 @@ export class PrismaUserMapper {
       name: user.name,
       createdAt: user.createdAt ?? new Date(),
       role: user.role,
+      birthdate: user.birthdate,
+      phone: user.phone,
+      photoPath: user.photoPath,
+      updatedAt: user.updatedAt || new Date(),
     }
   }
 }

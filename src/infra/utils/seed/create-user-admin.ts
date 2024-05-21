@@ -11,6 +11,9 @@ export async function seed() {
       email: 'teste@gmail.com',
       passwordHash,
       role: 'ADMIN',
+      phone: '123456789',
+      photoPath: '/path/to/photo.jpg',
+      birthdate: '1990-01-01',
     },
   })
 }

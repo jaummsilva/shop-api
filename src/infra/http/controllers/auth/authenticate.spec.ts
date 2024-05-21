@@ -28,6 +28,9 @@ describe('Authenticate (e2e)', () => {
         email: 'teste@gmail.com',
         password: '123456',
         role: 'ADMIN',
+        phone: '123456789',
+        photoPath: '/path/to/photo.jpg',
+        birthdate: '1990-01-01',
       })
       .set('Authorization', `Bearer ${token}`)
 

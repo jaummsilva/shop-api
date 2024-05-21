@@ -5,8 +5,12 @@ type UserProps = {
   name: string
   email: string
   passwordHash: string
+  phone: string
   createdAt?: Date
+  updatedAt?: Date
   role: 'ADMIN' | 'MEMBER'
+  birthdate: Date
+  photoPath: string
 }
 
 export class User extends Entity<UserProps> {
@@ -26,35 +30,67 @@ export class User extends Entity<UserProps> {
     return user
   }
 
-  get email() {
-    return this.props.email
-  }
-
-  get passwordHash() {
-    return this.props.passwordHash
-  }
-
   get name() {
     return this.props.name
   }
 
-  get createdAt() {
-    return this.props.createdAt
+  set name(name: string) {
+    this.props.name = name
   }
 
-  get role() {
-    return this.props.role
+  get email() {
+    return this.props.email
   }
 
   set email(email: string) {
     this.props.email = email
   }
 
+  get passwordHash() {
+    return this.props.passwordHash
+  }
+
   set passwordHash(passwordHash: string) {
     this.props.passwordHash = passwordHash
   }
 
-  set name(name: string) {
-    this.props.name = name
+  get phone() {
+    return this.props.phone
+  }
+
+  set phone(phone: string) {
+    this.props.phone = phone
+  }
+
+  get createdAt() {
+    return this.props.createdAt
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
+  set role(role: 'ADMIN' | 'MEMBER') {
+    this.props.role = role
+  }
+
+  get role() {
+    return this.props.role
+  }
+
+  get birthdate() {
+    return this.props.birthdate
+  }
+
+  set birthdate(birthdate: Date) {
+    this.props.birthdate = birthdate
+  }
+
+  get photoPath() {
+    return this.props.photoPath
+  }
+
+  set photoPath(photoPath: string) {
+    this.props.photoPath = photoPath
   }
 }

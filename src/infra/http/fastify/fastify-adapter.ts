@@ -25,7 +25,7 @@ export class FastifyAdapter implements HttpServer {
 
   start(port: number, callback: () => void) {
     this.app.register(fastifyCors, {
-      origin: 'http://localhost:5173',
+      origin: env.FRONTEND_URL,
       credentials: true,
     })
 

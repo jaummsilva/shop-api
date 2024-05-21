@@ -10,6 +10,9 @@ interface UserRegisterUseCaseRequest {
   password: string
   email: string
   role: 'ADMIN' | 'MEMBER'
+  phone: string
+  birthdate: Date
+  photoPath: string
 }
 
 type UserRegisterUseCaseResponse = Either<
@@ -28,6 +31,9 @@ export class UserRegisterUseCase {
     password,
     email,
     role,
+    phone,
+    birthdate,
+    photoPath,
   }: UserRegisterUseCaseRequest): Promise<UserRegisterUseCaseResponse> {
     const passwordHash = await this.hashGenerator.hash(password)
 
@@ -37,7 +43,15 @@ export class UserRegisterUseCase {
       return left(new UserAlreadyExistsError())
     }
 
-    const user = User.create({ name, email, passwordHash, role })
+    const user = User.create({
+      name,
+      email,
+      passwordHash,
+      role,
+      phone,
+      birthdate,
+      photoPath,
+    })
 
     await this.usersRepository.create(user)
 
