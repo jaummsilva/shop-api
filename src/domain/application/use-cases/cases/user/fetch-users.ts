@@ -7,6 +7,7 @@ import type { User } from '@/domain/enterprise/user'
 interface FetchUsersUseCaseRequest {
   name?: string
   page?: number
+  perPage?: number
 }
 
 type FetchUsersUseCaseResponse = Either<
@@ -20,8 +21,9 @@ export class FetchUsersUseCase {
   async execute({
     name,
     page,
+    perPage,
   }: FetchUsersUseCaseRequest): Promise<FetchUsersUseCaseResponse> {
-    const result = await this.usersRepository.findMany({ page, name })
+    const result = await this.usersRepository.findMany({ page, name, perPage })
 
     const users = result.users
     const meta = result.meta

@@ -13,16 +13,17 @@ export class FecthUsersController {
     private bodyValidation: Validation<{
       name?: string
       page?: number
+      perPage?: number
     }>,
   ) {}
 
   async handle(request: HttpRequest, reply: HttpResponse) {
     try {
-      const { name, page } = this.bodyValidation.parse(request.query)
+      const { name, page, perPage } = this.bodyValidation.parse(request.query)
 
       const fecthGymsCase = makeFetchUsersUseCase()
 
-      const result = await fecthGymsCase.execute({ name, page })
+      const result = await fecthGymsCase.execute({ name, page, perPage })
 
       if (result.isRight()) {
         const { users, meta } = result.value

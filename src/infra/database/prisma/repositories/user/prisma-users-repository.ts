@@ -74,10 +74,10 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async findMany(params: FindManyParams) {
-    const { name = '', page = 1 } = params
+    const { name = '', page = 1, perPage = 10 } = params
 
-    const skip = (page - 1) * 10
-    const take = 10
+    const skip = (page - 1) * perPage
+    const take = perPage
 
     const [users, totalCount] = await Promise.all([
       prisma.user.findMany({
@@ -110,7 +110,7 @@ export class PrismaUsersRepository implements UsersRepository {
 
     const meta: MetaResponse = {
       pageIndex: page || 1,
-      perPage: 10,
+      perPage,
       totalCount,
     }
 

@@ -5,6 +5,7 @@ import type { MetaResponse } from '../utils/meta-response'
 export interface FindManyParams {
   name?: string
   page?: number
+  perPage?: number
 }
 
 export interface UsersRepository {
