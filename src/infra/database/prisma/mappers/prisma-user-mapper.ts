@@ -14,9 +14,11 @@ export class PrismaUserMapper {
         role: raw.role,
         birthdate: raw.birthdate,
         phone: raw.phone,
-        photoPath: raw.photoPath,
+        imageFakeName: raw.imageFakeName,
+        imageOriginalName: raw.imageOriginalName,
         updatedAt: raw.updatedAt,
         status: raw.status,
+        imageType: raw.imageType,
       },
       new UniqueEntityID(raw.id),
     )
@@ -32,7 +34,9 @@ export class PrismaUserMapper {
       role: user.role,
       birthdate: user.birthdate,
       phone: user.phone,
-      photoPath: user.photoPath,
+      imageFakeName: user.imageFakeName,
+      imageOriginalName: user.imageOriginalName,
+      imageType: user.imageType,
       updatedAt: user.updatedAt || new Date(),
       status: user.status || 'S',
     }

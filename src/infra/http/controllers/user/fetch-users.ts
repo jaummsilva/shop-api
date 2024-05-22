@@ -21,9 +21,9 @@ export class FecthUsersController {
     try {
       const { name, page, perPage } = this.bodyValidation.parse(request.query)
 
-      const fecthGymsCase = makeFetchUsersUseCase()
+      const fecthUsersCase = makeFetchUsersUseCase()
 
-      const result = await fecthGymsCase.execute({ name, page, perPage })
+      const result = await fecthUsersCase.execute({ name, page, perPage })
 
       if (result.isRight()) {
         const { users, meta } = result.value

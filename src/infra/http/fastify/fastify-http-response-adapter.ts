@@ -14,8 +14,8 @@ export class FastifyHttpResponseAdapter implements HttpResponse {
     return this
   }
 
-  send(): this {
-    this.response.send()
+  send(payload?: any): this {
+    this.response.send(payload)
     return this
   }
 
@@ -31,6 +31,11 @@ export class FastifyHttpResponseAdapter implements HttpResponse {
 
   redirect(path: string): this {
     this.response.redirect(path)
+    return this
+  }
+
+  type(type: string): this {
+    this.response.type(type)
     return this
   }
 }

@@ -33,7 +33,9 @@ model User {
   updatedAt    DateTime @updatedAt @map("updated_at")
   orders       Order[]
   cart         Cart?
-  photoPath    String   @map("photo_path")
+  imageOriginalName    String   @map("image_original_name")
+  imageFakeName    String   @map("image_fake_name")
+  imageType    String   @map("image_type") @default("")
   birthdate    DateTime @map("birthdate")
   status    StatusUser @default(S)
 

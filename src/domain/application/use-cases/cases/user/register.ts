@@ -12,7 +12,9 @@ interface UserRegisterUseCaseRequest {
   role: 'ADMIN' | 'MEMBER'
   phone: string
   birthdate: Date
-  photoPath: string
+  imageOriginalName: string
+  imageFakeName: string
+  imageType: string
 }
 
 type UserRegisterUseCaseResponse = Either<
@@ -33,7 +35,9 @@ export class UserRegisterUseCase {
     role,
     phone,
     birthdate,
-    photoPath,
+    imageOriginalName,
+    imageFakeName,
+    imageType,
   }: UserRegisterUseCaseRequest): Promise<UserRegisterUseCaseResponse> {
     const passwordHash = await this.hashGenerator.hash(password)
 
@@ -50,7 +54,10 @@ export class UserRegisterUseCase {
       role,
       phone,
       birthdate,
-      photoPath,
+      imageOriginalName,
+      imageFakeName,
+      status: 'S',
+      imageType,
     })
 
     await this.usersRepository.create(user)

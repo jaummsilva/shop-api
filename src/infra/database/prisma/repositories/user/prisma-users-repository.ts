@@ -18,7 +18,9 @@ export class PrismaUsersRepository implements UsersRepository {
         passwordHash: data.passwordHash,
         createdAt: data.createdAt,
         phone: data.phone,
-        photoPath: data.photoPath,
+        imageOriginalName: data.imageOriginalName,
+        imageFakeName: data.imageFakeName,
+        imageType: data.imageType,
         birthdate: data.birthdate,
         status: 'S',
       },
@@ -66,9 +68,17 @@ export class PrismaUsersRepository implements UsersRepository {
         id: data.id.toString(),
       },
       data: {
+        role: data.role,
         email: data.email,
         name: data.name,
         passwordHash: data.passwordHash,
+        createdAt: data.createdAt,
+        phone: data.phone,
+        imageFakeName: data.imageFakeName,
+        imageOriginalName: data.imageOriginalName,
+        imageType: data.imageType,
+        birthdate: data.birthdate,
+        status: data.status,
       },
     })
     return PrismaUserMapper.toDomain(user)

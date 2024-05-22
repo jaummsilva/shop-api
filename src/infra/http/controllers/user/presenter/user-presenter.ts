@@ -8,8 +8,11 @@ export class UsersPresenter {
       birthdate: user.birthdate,
       phone: user.phone,
       email: user.email,
-      photoPath: user.photoPath,
+      imageOriginalName: user.imageOriginalName,
+      imageFakeName: user.imageFakeName,
+      imageUrl: '/user/get-image/' + user.imageFakeName,
       role: user.role,
+      status: user.status,
     }
   }
 }

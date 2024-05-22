@@ -10,7 +10,9 @@ type UserProps = {
   updatedAt?: Date
   role: 'ADMIN' | 'MEMBER'
   birthdate: Date
-  photoPath: string
+  imageOriginalName: string
+  imageFakeName: string
+  imageType: string
   status: 'S' | 'N'
 }
 
@@ -87,12 +89,20 @@ export class User extends Entity<UserProps> {
     this.props.birthdate = birthdate
   }
 
-  get photoPath() {
-    return this.props.photoPath
+  get imageOriginalName() {
+    return this.props.imageOriginalName
   }
 
-  set photoPath(photoPath: string) {
-    this.props.photoPath = photoPath
+  set imageOriginalName(imageOriginalName: string) {
+    this.props.imageOriginalName = imageOriginalName
+  }
+
+  get imageFakeName() {
+    return this.props.imageFakeName
+  }
+
+  set imageFakeName(imageFakeName: string) {
+    this.props.imageFakeName = imageFakeName
   }
 
   get status() {
@@ -101,5 +111,13 @@ export class User extends Entity<UserProps> {
 
   set status(status: 'S' | 'N') {
     this.props.status = status
+  }
+
+  get imageType() {
+    return this.props.imageType
+  }
+
+  set imageType(imageType: string) {
+    this.props.imageType = imageType
   }
 }

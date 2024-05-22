@@ -4,6 +4,9 @@ CREATE TYPE "Role" AS ENUM ('ADMIN', 'MEMBER');
 -- CreateEnum
 CREATE TYPE "StatusCart" AS ENUM ('ABERTO', 'FECHADO');
 
+-- CreateEnum
+CREATE TYPE "StatusUser" AS ENUM ('S', 'N');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -14,8 +17,10 @@ CREATE TABLE "users" (
     "password_hash" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "photo_path" TEXT NOT NULL,
+    "image_original_name" TEXT NOT NULL,
+    "image_fake_name" TEXT NOT NULL,
     "birthdate" TIMESTAMP(3) NOT NULL,
+    "status" "StatusUser" NOT NULL DEFAULT 'S',
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
