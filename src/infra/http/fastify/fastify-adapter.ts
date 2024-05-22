@@ -1,6 +1,7 @@
 import fastifyCookie from '@fastify/cookie'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import fastifyMultipart from '@fastify/multipart'
 import fastify, {
   type FastifyInstance,
   type FastifyReply,
@@ -29,6 +30,7 @@ export class FastifyAdapter implements HttpServer {
       credentials: true,
     })
 
+    this.app.register(fastifyMultipart, { attachFieldsToBody: true })
     this.app.register(fastifyJwt, {
       secret: env.JWT_SECRET,
       cookie: {

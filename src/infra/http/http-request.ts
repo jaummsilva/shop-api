@@ -10,5 +10,6 @@ export interface HttpRequest {
     sub: string
     role: 'ADMIN' | 'MEMBER'
   }
+
   jwtVerify(): Promise<void>
 }
