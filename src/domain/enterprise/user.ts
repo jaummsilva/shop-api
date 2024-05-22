@@ -11,6 +11,7 @@ type UserProps = {
   role: 'ADMIN' | 'MEMBER'
   birthdate: Date
   photoPath: string
+  status: 'S' | 'N'
 }
 
 export class User extends Entity<UserProps> {
@@ -92,5 +93,13 @@ export class User extends Entity<UserProps> {
 
   set photoPath(photoPath: string) {
     this.props.photoPath = photoPath
+  }
+
+  get status() {
+    return this.props.status
+  }
+
+  set status(status: 'S' | 'N') {
+    this.props.status = status
   }
 }

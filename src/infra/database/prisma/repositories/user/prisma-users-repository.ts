@@ -20,6 +20,7 @@ export class PrismaUsersRepository implements UsersRepository {
         phone: data.phone,
         photoPath: data.photoPath,
         birthdate: data.birthdate,
+        status: 'S',
       },
     })
     return PrismaUserMapper.toDomain(user)

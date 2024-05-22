@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { fromError } from 'zod-validation-error'
 
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import type { Validation } from '@/core/validation/validation'
 import { UserAlreadyExistsError } from '@/domain/application/use-cases/errors/user/user-already-exists'
 import { PATH_TEMP_FILES } from '@/paths'
@@ -37,13 +38,12 @@ export class UserController {
       const { value: birthdateValue } = birthdate
       const { value: phoneValue } = phone
 
-      const {
-        file: photoFile,
-        filename: photoFilename,
-        mimetype: photoMimetype,
-      } = photoPath
+      const { filename: photoFilename, mimetype: photoMimetype } = photoPath
 
-      const destinationPath = `temp/${photoFile.filename}`
+      // Gere um UUID para o novo nome do arquivo
+      const uuid = new UniqueEntityID()
+      const fileExtension = path.extname(photoFilename)
+      const destinationPath = `src/temp/${uuid}${fileExtension}`
       // Parse the body using bodyValidation
       this.bodyValidation.parse({
         email: emailValue,
@@ -83,9 +83,8 @@ export class UserController {
         }
       }
 
-      const pathRegister = path.join(PATH_TEMP_FILES, photoPath.filename)
       const data = await photoPath.toBuffer()
-      fs.writeFileSync(pathRegister, data)
+      fs.writeFileSync(destinationPath, data)
 
       return reply.status(201).send()
     } catch (error) {

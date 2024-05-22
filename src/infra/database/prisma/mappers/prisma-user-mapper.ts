@@ -16,6 +16,7 @@ export class PrismaUserMapper {
         phone: raw.phone,
         photoPath: raw.photoPath,
         updatedAt: raw.updatedAt,
+        status: raw.status,
       },
       new UniqueEntityID(raw.id),
     )
@@ -33,6 +34,7 @@ export class PrismaUserMapper {
       phone: user.phone,
       photoPath: user.photoPath,
       updatedAt: user.updatedAt || new Date(),
+      status: user.status || 'S',
     }
   }
 }
