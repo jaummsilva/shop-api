@@ -19,6 +19,7 @@ CREATE TABLE "users" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "image_original_name" TEXT NOT NULL,
     "image_fake_name" TEXT NOT NULL,
+    "image_type" TEXT NOT NULL DEFAULT '',
     "birthdate" TIMESTAMP(3) NOT NULL,
     "status" "StatusUser" NOT NULL DEFAULT 'S',
 

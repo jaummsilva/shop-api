@@ -11,6 +11,7 @@ import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
 import type { HttpServer } from '../../http-server'
 import { makeUdateUseCase } from './factories/make-update-use-case'
+import type { UpdateBodyMultiPartsProps } from './interfaces/update-body-multi-parts-props'
 
 export class UserUpdateController {
   constructor(
@@ -23,7 +24,13 @@ export class UserUpdateController {
       role: 'ADMIN' | 'MEMBER'
       phone: string
       birthdate: Date
-      photoPath: string
+      photoPath: {
+        file: {
+          type: string
+        }
+        filename: string
+        mimetype: string
+      }
       status: 'S' | 'N'
     }>,
   ) {}
@@ -40,22 +47,21 @@ export class UserUpdateController {
         photoPath,
         userId,
         status,
-      } = request.body
+      } = request.body as UpdateBodyMultiPartsProps
 
-      const { value: nameValue } = name
-      const { value: userIdValue } = userId
-      const { value: emailValue } = email
-      const { value: passwordValue } = password
-      const { value: roleValue } = role
-      const { value: birthdateValue } = birthdate
-      const { value: phoneValue } = phone
-      const { value: statusValue } = status
-
+      const nameValue = name.value
+      const userIdValue = userId.value
+      const emailValue = email.value
+      const passwordValue = password.value
+      const roleValue = role.value
+      const birthdateValue = birthdate.value
+      const phoneValue = phone.value
+      const statusValue = status.value
       const { filename: photoFilename, mimetype: photoMimetype } = photoPath
 
       // Gere um UUID para o novo nome do arquivo
       const uuid = new UniqueEntityID().toString()
-      const destinationPath = `${uuid}.${photoFilename.split('.').pop()}` // Ensure correct file extension
+      const imageFakeName = `${uuid}.${photoFilename.split('.').pop()}`
 
       this.bodyValidation.parse({
         userId: userIdValue,
@@ -85,7 +91,7 @@ export class UserUpdateController {
         role: roleValue,
         birthdate: birthdateValue,
         phone: phoneValue,
-        imageFakeName: destinationPath,
+        imageFakeName,
         imageOriginalName: photoFilename,
         status: statusValue,
         imageType: photoMimetype,
@@ -102,8 +108,20 @@ export class UserUpdateController {
       }
 
       const data = await photoPath.toBuffer()
-      const path2 = path.join(PATH_TEMP_FILES, destinationPath)
-      fs.writeFileSync(path2, data)
+      const pathImage = path.join(PATH_TEMP_FILES, imageFakeName)
+
+      // Verifica se a imagem original é diferente da que está sendo enviada
+      const shouldDeleteExistingPhoto = photoFilename !== imageFakeName
+
+      if (shouldDeleteExistingPhoto) {
+        // Deleta a foto existente a partir do imageFakeName da pasta temp
+        const existingImagePath = path.join(PATH_TEMP_FILES, photoFilename)
+        if (fs.existsSync(existingImagePath)) {
+          fs.unlinkSync(existingImagePath)
+        }
+      }
+
+      fs.writeFileSync(pathImage, data)
 
       return reply.status(201).send()
     } catch (error) {

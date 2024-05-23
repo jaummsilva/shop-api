@@ -14,7 +14,7 @@ export class FastifyHttpResponseAdapter implements HttpResponse {
     return this
   }
 
-  send(payload?: any): this {
+  send(payload?: string | Buffer | object): this {
     this.response.send(payload)
     return this
   }

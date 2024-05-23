@@ -10,7 +10,7 @@ export interface CookieOptions {
 
 export interface HttpResponse {
   json(data: object | undefined): this
-  send(payload?: any): this
+  send(payload?: string | Buffer | object): this
   status(code: number): this
   setCookie(name: string, value: string, options?: CookieOptions): this
   redirect(path: string): this
