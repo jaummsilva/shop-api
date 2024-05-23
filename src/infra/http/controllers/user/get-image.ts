@@ -3,6 +3,7 @@ import path from 'path'
 import { fromError } from 'zod-validation-error'
 
 import type { Validation } from '@/core/validation/validation'
+import { getImageContentType } from '@/infra/utils/image/get-imagem-content-type'
 import { PATH_TEMP_FILES } from '@/paths'
 
 import type { HttpRequest } from '../../http-request'
@@ -33,10 +34,8 @@ export class GetImageUserController {
 
         const contentType = getImageContentType(imagePath)
 
-        reply.type(contentType)
-
         // Send the image buffer as the response
-        return reply.send(imageBuffer)
+        return reply.type(contentType).send(imageBuffer)
       } else {
         return reply.status(404).json({
           message: 'Photo not found',
@@ -49,19 +48,5 @@ export class GetImageUserController {
         message: validationError.details,
       })
     }
-  }
-}
-
-// Helper function to determine the content type of the image
-function getImageContentType(imagePath: string): string {
-  const ext = path.extname(imagePath).toLowerCase()
-  switch (ext) {
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg'
-    case '.png':
-      return 'image/png'
-    default:
-      return 'application/octet-stream' // Default to binary if extension is unknown
   }
 }
