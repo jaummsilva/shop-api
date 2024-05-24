@@ -1,5 +1,6 @@
 import type { HashComparer } from '@/core/cryptography/hash-comparer'
 import { type Either, left, right } from '@/core/either'
+import { UnauthorizedError } from '@/core/errors/unauthorized-error'
 import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
 import type { User } from '@/domain/enterprise/user'
 
@@ -26,6 +27,10 @@ export class AuthenticateUseCase {
 
     if (!user) {
       return left(new UserNotExistsError())
+    }
+
+    if (user.status === 'N') {
+      return left(new UnauthorizedError())
     }
 
     const doesPasswordMatches = await this.hashCompare.compare(

@@ -6,6 +6,8 @@ export class UsersPresenter {
       id: user.id.toString(),
       name: user.name,
       birthdate: user.birthdate,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
       phone: user.phone,
       email: user.email,
       imageOriginalName: user.imageOriginalName,

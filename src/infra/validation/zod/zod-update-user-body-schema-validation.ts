@@ -36,9 +36,7 @@ const userUpdateBodySchema = z.object({
 
       return true // Return true if file passes all checks
     })
-    .refine(({ file }) => !!file, {
-      message: 'Photo is required.',
-    }),
+    .optional(),
   birthdate: z.string().transform((value) => new Date(value)),
 })
 

@@ -64,9 +64,15 @@ export class UserUpdateUseCase {
     user.name = name
     user.phone = phone
     user.role = role
-    user.imageFakeName = imageFakeName
-    user.imageOriginalName = imageOriginalName
-    user.imageType = imageType
+    if (
+      imageFakeName !== undefined &&
+      imageFakeName !== null &&
+      imageFakeName !== ''
+    ) {
+      user.imageFakeName = imageFakeName
+      user.imageOriginalName = imageOriginalName
+      user.imageType = imageType
+    }
 
     await this.usersRepository.update(user) // Assuming update method exists
 

@@ -37,12 +37,16 @@ export class AdminAuthenticateUseCase {
       user.passwordHash,
     )
 
-    if (!doesPasswordMatches) {
-      return left(new UserNotExistsError())
+    if (user.status === 'N') {
+      return left(new UnauthorizedError())
     }
 
     if (user.role === 'MEMBER') {
       return left(new UnauthorizedError())
+    }
+
+    if (!doesPasswordMatches) {
+      return left(new UserNotExistsError())
     }
 
     return right({ user })

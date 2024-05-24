@@ -24,7 +24,7 @@ export class UserUpdateController {
       role: 'ADMIN' | 'MEMBER'
       phone: string
       birthdate: Date
-      photoPath: {
+      photoPath?: {
         file: {
           type: string
         }
@@ -49,6 +49,10 @@ export class UserUpdateController {
         status,
       } = request.body as UpdateBodyMultiPartsProps
 
+      let imageFakeName = ''
+      let photoFilename = ''
+      let photoMimetype = ''
+
       const nameValue = name.value
       const userIdValue = userId.value
       const emailValue = email.value
@@ -57,11 +61,21 @@ export class UserUpdateController {
       const birthdateValue = birthdate.value
       const phoneValue = phone.value
       const statusValue = status.value
-      const { filename: photoFilename, mimetype: photoMimetype } = photoPath
 
-      // Gere um UUID para o novo nome do arquivo
-      const uuid = new UniqueEntityID().toString()
-      const imageFakeName = `${uuid}.${photoFilename.split('.').pop()}`
+      if (photoPath) {
+        photoFilename = photoPath.filename
+        photoMimetype = photoPath.mimetype
+
+        // Generate a UUID for the new file name
+        const uuid = new UniqueEntityID().toString()
+        imageFakeName = `${uuid}.${photoFilename.split('.').pop()}`
+
+        const data = await photoPath.toBuffer()
+        const pathImage = path.join(PATH_TEMP_FILES, imageFakeName)
+
+        // Save the new image file
+        fs.writeFileSync(pathImage, data)
+      }
 
       this.bodyValidation.parse({
         userId: userIdValue,
@@ -72,13 +86,15 @@ export class UserUpdateController {
         phone: phoneValue,
         birthdate: birthdateValue,
         status: statusValue,
-        photoPath: {
-          file: {
-            type: photoPath.type,
-          },
-          filename: photoFilename,
-          mimetype: photoMimetype,
-        },
+        photoPath: photoPath
+          ? {
+              file: {
+                type: photoPath.type,
+              },
+              filename: photoFilename,
+              mimetype: photoMimetype,
+            }
+          : undefined,
       })
 
       const userUpdateUsersCase = makeUdateUseCase()
@@ -107,23 +123,7 @@ export class UserUpdateController {
         }
       }
 
-      const data = await photoPath.toBuffer()
-      const pathImage = path.join(PATH_TEMP_FILES, imageFakeName)
-
-      // Verifica se a imagem original é diferente da que está sendo enviada
-      const shouldDeleteExistingPhoto = photoFilename !== imageFakeName
-
-      if (shouldDeleteExistingPhoto) {
-        // Deleta a foto existente a partir do imageFakeName da pasta temp
-        const existingImagePath = path.join(PATH_TEMP_FILES, photoFilename)
-        if (fs.existsSync(existingImagePath)) {
-          fs.unlinkSync(existingImagePath)
-        }
-      }
-
-      fs.writeFileSync(pathImage, data)
-
-      return reply.status(201).send()
+      return reply.status(204).send()
     } catch (error) {
       const validationError = fromError(error)
 
