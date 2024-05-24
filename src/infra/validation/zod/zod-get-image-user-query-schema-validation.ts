@@ -5,6 +5,7 @@ import type { Validation } from '@/core/validation/validation'
 // Definição do esquema Zod para o corpo de registro de usuário
 const getImageUserBodySchema = z.object({
   imageName: z.string(),
+  userId: z.string().uuid(),
 })
 
 // Tipo inferido a partir do esquema Zod

@@ -12,7 +12,7 @@ export class UsersPresenter {
       email: user.email,
       imageOriginalName: user.imageOriginalName,
       imageFakeName: user.imageFakeName,
-      imageUrl: '/user/get-image/' + user.imageFakeName,
+      imageUrl: `/user/${user.id.toString()}/get-image/` + user.imageFakeName,
       role: user.role,
       status: user.status,
     }

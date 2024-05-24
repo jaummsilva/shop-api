@@ -49,10 +49,6 @@ export class UserUpdateController {
         status,
       } = request.body as UpdateBodyMultiPartsProps
 
-      let imageFakeName = ''
-      let photoFilename = ''
-      let photoMimetype = ''
-
       const nameValue = name.value
       const userIdValue = userId.value
       const emailValue = email.value
@@ -62,6 +58,10 @@ export class UserUpdateController {
       const phoneValue = phone.value
       const statusValue = status.value
 
+      let imageFakeName = ''
+      let photoFilename = ''
+      let photoMimetype = ''
+
       if (photoPath) {
         photoFilename = photoPath.filename
         photoMimetype = photoPath.mimetype
@@ -69,12 +69,6 @@ export class UserUpdateController {
         // Generate a UUID for the new file name
         const uuid = new UniqueEntityID().toString()
         imageFakeName = `${uuid}.${photoFilename.split('.').pop()}`
-
-        const data = await photoPath.toBuffer()
-        const pathImage = path.join(PATH_TEMP_FILES, imageFakeName)
-
-        // Save the new image file
-        fs.writeFileSync(pathImage, data)
       }
 
       this.bodyValidation.parse({
@@ -121,6 +115,25 @@ export class UserUpdateController {
             message: error.message,
           })
         }
+      }
+
+      // Check if a new photo is provided
+      if (photoPath) {
+        // Read photo data
+        const data = await photoPath.toBuffer()
+        const userTempDir = path.join(PATH_TEMP_FILES, userIdValue)
+        if (fs.existsSync(userTempDir)) {
+          fs.readdirSync(userTempDir).forEach((file) => {
+            const filePath = path.join(userTempDir, file)
+            fs.unlinkSync(filePath)
+          })
+        } else {
+          fs.mkdirSync(userTempDir, { recursive: true })
+        }
+
+        // Save the new image file
+        const pathImage = path.join(userTempDir, imageFakeName)
+        fs.writeFileSync(pathImage, data)
       }
 
       return reply.status(204).send()

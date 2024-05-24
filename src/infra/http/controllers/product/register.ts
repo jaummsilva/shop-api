@@ -96,29 +96,46 @@ export class ProductRegisterController {
 
       // Executa o caso de uso para registrar o produto
       const productRegisterUseCase = makeProductRegisterUseCase()
-      await productRegisterUseCase.execute({
+      const result = await productRegisterUseCase.execute({
         name: nameValue,
         price: priceValue,
         description: descriptionValue,
         productImages,
       })
 
-      // Função para salvar a imagem
-      const saveImage = async (image: ProductImages, buffer: Buffer) => {
-        const pathImage = path.join(PATH_TEMP_FILES, image.imageFakeName)
-        fs.writeFileSync(pathImage, buffer)
-      }
+      if (result.isRight()) {
+        // Função para salvar a imagem
+        const saveImage = async (
+          image: ProductImages,
+          buffer: Buffer,
+          isPrincipal: boolean,
+        ) => {
+          const productTempDir = path.join(
+            PATH_TEMP_FILES,
+            result.value.product.id.toString(),
+            isPrincipal ? 'principal' : 'optional',
+          )
+          const pathImage = path.join(productTempDir, image.imageFakeName)
 
-      // Salva a imagem principal
-      let data = await photoPrincipal.toBuffer()
-      await saveImage(productImages[0], data)
+          // Garante que o diretório exista antes de gravar o arquivo
+          if (!fs.existsSync(productTempDir)) {
+            fs.mkdirSync(productTempDir, { recursive: true })
+          }
 
-      // Verifica se há imagens adicionais e as salva
-      if (additionalPhotos.length > 0) {
-        for (let i = 0; i < additionalPhotos.length; i++) {
-          if (photos[i]) {
-            data = await photos[i]!.toBuffer() // adicionamos ! para indicar que sabemos que photos[i] não é undefined
-            await saveImage(productImages[i + 1], data)
+          fs.writeFileSync(pathImage, buffer)
+        }
+
+        // Salva a imagem principal
+        let data = await photoPrincipal.toBuffer()
+        await saveImage(productImages[0], data, true)
+
+        // Verifica se há imagens adicionais e as salva
+        if (additionalPhotos.length > 0) {
+          for (let i = 0; i < additionalPhotos.length; i++) {
+            if (photos[i]) {
+              data = await photos[i]!.toBuffer() // adicionamos ! para indicar que sabemos que photos[i] não é undefined
+              await saveImage(productImages[i + 1], data, false)
+            }
           }
         }
       }

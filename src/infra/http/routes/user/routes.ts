@@ -106,7 +106,7 @@ export class UserRoutes {
 
     this.httpServer.register(
       'get',
-      '/user/get-image/:imageName',
+      '/user/:userId/get-image/:imageName',
       getImageUserController.handle.bind(getImageUserController),
       isPrivateRoute,
       isAdmin,

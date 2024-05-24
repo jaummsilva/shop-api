@@ -60,8 +60,8 @@ export class UserRegisterUseCase {
       imageType,
     })
 
-    await this.usersRepository.create(user)
+    const userCreated = await this.usersRepository.create(user)
 
-    return right({ user })
+    return right({ user: userCreated })
   }
 }

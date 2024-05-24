@@ -36,6 +36,7 @@ export class ProductRegisterUseCase {
       price,
       createdAt,
       updatedAt,
+      productImages,
     })
 
     const productCreated = await this.productsRepository.create(product)
@@ -56,6 +57,6 @@ export class ProductRegisterUseCase {
       ),
     )
 
-    return right({ product })
+    return right({ product: productCreated })
   }
 }

@@ -12,7 +12,7 @@ type ProductProps = {
   updatedAt?: Date
   orderItems?: []
   cartItems?: []
-  productImages?: ProductImages[]
+  productImages: ProductImages[]
 }
 
 export class Product extends Entity<ProductProps> {
@@ -64,14 +64,6 @@ export class Product extends Entity<ProductProps> {
     return this.props.updatedAt
   }
 
-  get orderItems() {
-    return this.props.orderItems
-  }
-
-  set orderItems(orderItems: [] | undefined) {
-    this.props.orderItems = orderItems
-  }
-
   get cartItems() {
     return this.props.cartItems
   }
@@ -80,15 +72,11 @@ export class Product extends Entity<ProductProps> {
     this.props.cartItems = cartItems
   }
 
-  get productImages() {
+  get productImages(): ProductImages[] {
     return this.props.productImages
   }
 
-  set productImages(productImages: ProductImages[] | undefined) {
+  set productImages(productImages: ProductImages[]) {
     this.props.productImages = productImages
-  }
-
-  assignImages(images: ProductImages[]) {
-    this.props.productImages = images
   }
 }

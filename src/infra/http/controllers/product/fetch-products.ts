@@ -5,7 +5,7 @@ import type { Validation } from '@/core/validation/validation'
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
 import { makeFetchProductsUseCase } from './factories/make-fetch-products-use-case'
-import { ProductsPresenter } from './presenter/user-presenter'
+import { ProductsPresenter } from './presenter/product-presenter'
 export class FecthProductsController {
   constructor(
     private bodyValidation: Validation<{

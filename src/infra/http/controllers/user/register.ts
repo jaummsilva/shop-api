@@ -83,9 +83,19 @@ export class UserController {
         return reply.status(409).json({ message: result.value.message })
       }
 
-      const data = await photoPath.toBuffer()
-      const pathImage = path.join(PATH_TEMP_FILES, imageFakeName)
-      fs.writeFileSync(pathImage, data)
+      if (result.isRight()) {
+        // Save the photo to the file system
+        const data = await photoPath.toBuffer()
+        const userId = result.value.user.id.toString() // Assuming the result has the user entity with ID
+        const userTempDir = path.join(PATH_TEMP_FILES, userId)
+        const pathImage = path.join(userTempDir, imageFakeName)
+
+        if (!fs.existsSync(userTempDir)) {
+          fs.mkdirSync(userTempDir, { recursive: true })
+        }
+
+        fs.writeFileSync(pathImage, data)
+      }
 
       return reply.status(201).send()
     } catch (error) {

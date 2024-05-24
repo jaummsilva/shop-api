@@ -1,11 +1,14 @@
-import type { Product as PrismaProduct } from '@prisma/client'
+import type { Product as PrismaProduct, ProductImages } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Product as DomainProduct } from '@/domain/enterprise/product'
+import { ProductImages as DomainProductImages } from '@/domain/enterprise/product-image'
 
 export class PrismaProductMapper {
-  static toDomain(raw: PrismaProduct): DomainProduct {
+  static toDomain(
+    raw: PrismaProduct & { productImages: ProductImages[] },
+  ): DomainProduct {
     return DomainProduct.create(
       {
         id: raw.id,
@@ -14,6 +17,18 @@ export class PrismaProductMapper {
         price: Number(raw.price),
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+        productImages: raw.productImages.map((productImage) =>
+          DomainProductImages.create(
+            {
+              imageFakeName: productImage.imageFakeName,
+              imageOriginalName: productImage.imageFakeName,
+              imageType: productImage.imageType,
+              isPrincipal: productImage.isPrincipal,
+              productId: productImage.id,
+            },
+            new UniqueEntityID(raw.id),
+          ),
+        ),
       },
       new UniqueEntityID(raw.id),
     )

@@ -16,6 +16,9 @@ export class PrismaProductsRepository implements ProductsRepository {
         createdAt: data.createdAt,
         price: data.price,
       },
+      include: {
+        productImages: true,
+      },
     })
     return PrismaProductMapper.toDomain(product)
   }
@@ -24,6 +27,9 @@ export class PrismaProductsRepository implements ProductsRepository {
     const product = await prisma.product.findUnique({
       where: {
         id: productId,
+      },
+      include: {
+        productImages: true,
       },
     })
     if (!product) {
@@ -42,6 +48,9 @@ export class PrismaProductsRepository implements ProductsRepository {
         description: data.description,
         createdAt: data.createdAt,
         price: data.price,
+      },
+      include: {
+        productImages: true,
       },
     })
     return PrismaProductMapper.toDomain(product)
@@ -67,8 +76,11 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         skip,
         take,
+        include: {
+          productImages: true,
+        },
       }),
-      prisma.user.count({
+      prisma.product.count({
         where: {
           OR: [
             {

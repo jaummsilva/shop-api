@@ -9,6 +9,13 @@ export class ProductsPresenter {
       price: product.price,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
+      productImages: product.productImages.map((productImage) => ({
+        imageUrl:
+          `/product/${product.id.toString()}/get-image/` +
+          (productImage.isPrincipal ? 'principal/' : 'optional/') +
+          productImage.imageFakeName,
+        isPrincipal: productImage.isPrincipal,
+      })),
     }
   }
 }

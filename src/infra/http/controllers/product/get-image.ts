@@ -9,19 +9,27 @@ import { PATH_TEMP_FILES } from '@/paths'
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
 
-export class GetImageUserController {
+export class GetProductImagesController {
   constructor(
     private bodyValidation: Validation<{
       imageName: string
-      userId: string
+      isPrincipal: 'principal' | 'optional'
+      productId: string
     }>,
   ) {}
 
   async handle(request: HttpRequest, reply: HttpResponse) {
     try {
-      const { imageName, userId } = this.bodyValidation.parse(request.params)
+      const { imageName, productId, isPrincipal } = this.bodyValidation.parse(
+        request.params,
+      )
 
-      const imagePath = path.join(PATH_TEMP_FILES, userId, imageName)
+      const imagePath = path.join(
+        PATH_TEMP_FILES,
+        productId,
+        isPrincipal,
+        imageName,
+      )
 
       const existsImage = fs.existsSync(imagePath)
       if (!existsImage) {
