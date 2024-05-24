@@ -1,9 +1,11 @@
+import { ZodUserDeleteBodySchemaValidation } from '@/infra/validation/zod/zod-delete-user-body-schema-validation'
 import { ZodFetchUsersQuerySchemaValidation } from '@/infra/validation/zod/zod-fetch-users-schema-validation'
 import { ZodGetImageUserBodySchemaValidation } from '@/infra/validation/zod/zod-get-image-user-query-schema-validation'
 import { ZodUserRegisterBodySchemaValidation } from '@/infra/validation/zod/zod-register-user-body-schema-validation'
 import { ZodUserStatusUpdateBodySchemaValidation } from '@/infra/validation/zod/zod-update-status-user-body-schema-validation'
 import { ZodUserUpdateBodySchemaValidation } from '@/infra/validation/zod/zod-update-user-body-schema-validation'
 
+import { UserDeleteController } from '../../controllers/user/delete'
 import { FecthUsersController } from '../../controllers/user/fetch-users'
 import { GetImageUserController } from '../../controllers/user/get-image'
 import { UserController } from '../../controllers/user/register'
@@ -62,6 +64,21 @@ export class UserRoutes {
       'put',
       '/user',
       userUpdatecontroller.handle.bind(userUpdatecontroller),
+      isPrivateRoute,
+      isAdmin,
+    )
+
+    const zodUserDeleteBodySchemaValidation =
+      new ZodUserDeleteBodySchemaValidation()
+    const userDeleteController = new UserDeleteController(
+      this.httpServer,
+      zodUserDeleteBodySchemaValidation,
+    )
+
+    this.httpServer.register(
+      'delete',
+      '/user/:userId',
+      userDeleteController.handle.bind(userDeleteController),
       isPrivateRoute,
       isAdmin,
     )
