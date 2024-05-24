@@ -2,6 +2,7 @@ import type { ProductsRepository } from '@/domain/application/repositories/produ
 import type { FindManyParams } from "@/domain/application/repositories/users-repository'"
 import type { MetaResponse } from '@/domain/application/utils/meta-response'
 import type { Product } from '@/domain/enterprise/product'
+import type { ProductImages } from '@/domain/enterprise/product-image'
 import { prisma } from '@/infra/database/prisma/prisma'
 
 import { PrismaProductMapper } from '../../mappers/prisma-product-mapper'
@@ -95,16 +96,12 @@ export class PrismaProductsRepository implements ProductsRepository {
     return { products: productsMapped, meta }
   }
 
-  async delete(userId: string): Promise<true | null> {
-    const user = await prisma.user.findUnique({
+  async delete(userId: string) {
+    await prisma.user.findUnique({
       where: {
         id: userId,
       },
     })
-
-    if (!user) {
-      return null
-    }
 
     await prisma.user.delete({
       where: {
@@ -113,5 +110,22 @@ export class PrismaProductsRepository implements ProductsRepository {
     })
 
     return true
+  }
+
+  async createProductImage(data: ProductImages) {
+    try {
+      await prisma.productImages.create({
+        data: {
+          imageFakeName: data.imageFakeName,
+          imageOriginalName: data.imageOriginalName,
+          isPrincipal: data.isPrincipal,
+          imageType: data.imageType,
+          productId: data.productId,
+        },
+      })
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }

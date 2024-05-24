@@ -17,7 +17,7 @@ export interface UsersRepository {
 
   findByEmail(email: string): Promise<User | null>
   findById(userId: string): Promise<User | null>
-  delete(userId: string): Promise<true | null>
+  delete(userId: string): Promise<boolean>
   findByEmailAndExcludeId(
     email: string,
     excludeId: string,

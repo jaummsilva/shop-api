@@ -101,7 +101,6 @@ export class UserRoutes {
     const zodGetImageUserBodySchemaValidation =
       new ZodGetImageUserBodySchemaValidation()
     const getImageUserController = new GetImageUserController(
-      this.httpServer,
       zodGetImageUserBodySchemaValidation,
     )
 

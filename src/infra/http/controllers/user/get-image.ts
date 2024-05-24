@@ -8,11 +8,9 @@ import { PATH_TEMP_FILES } from '@/paths'
 
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
-import type { HttpServer } from '../../http-server'
 
 export class GetImageUserController {
   constructor(
-    private httpServer: HttpServer,
     private bodyValidation: Validation<{
       imageName: string
     }>,

@@ -133,16 +133,12 @@ export class PrismaUsersRepository implements UsersRepository {
     return { users: usersMapped, meta }
   }
 
-  async delete(userId: string): Promise<true | null> {
-    const user = await prisma.user.findUnique({
+  async delete(userId: string) {
+    await prisma.user.findUnique({
       where: {
         id: userId,
       },
     })
-
-    if (!user) {
-      return null
-    }
 
     await prisma.user.delete({
       where: {

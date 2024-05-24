@@ -1,6 +1,8 @@
 import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
+import type { ProductImages } from './product-image'
+
 type ProductProps = {
   id?: string
   name: string
@@ -10,7 +12,7 @@ type ProductProps = {
   updatedAt?: Date
   orderItems?: []
   cartItems?: []
-  productImages?: []
+  productImages?: ProductImages[]
 }
 
 export class Product extends Entity<ProductProps> {
@@ -82,7 +84,11 @@ export class Product extends Entity<ProductProps> {
     return this.props.productImages
   }
 
-  set productImages(productImages: [] | undefined) {
+  set productImages(productImages: ProductImages[] | undefined) {
     this.props.productImages = productImages
+  }
+
+  assignImages(images: ProductImages[]) {
+    this.props.productImages = images
   }
 }
