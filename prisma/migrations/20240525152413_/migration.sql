@@ -41,8 +41,9 @@ CREATE TABLE "products" (
 -- CreateTable
 CREATE TABLE "product_images" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "path" TEXT NOT NULL,
+    "image_original_name" TEXT NOT NULL,
+    "image_fake_name" TEXT NOT NULL,
+    "image_type" TEXT NOT NULL DEFAULT '',
     "product_id" TEXT NOT NULL,
     "is_principal" BOOLEAN NOT NULL,
 

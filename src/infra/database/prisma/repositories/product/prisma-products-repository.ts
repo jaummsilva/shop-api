@@ -140,4 +140,26 @@ export class PrismaProductsRepository implements ProductsRepository {
       return false
     }
   }
+
+  async deleteProductImagesWherePrincipal(productId: string) {
+    await prisma.productImages.deleteMany({
+      where: {
+        productId,
+        isPrincipal: true,
+      },
+    })
+
+    return true
+  }
+
+  async deleteProductImagesWhereOptional(productId: string) {
+    await prisma.productImages.deleteMany({
+      where: {
+        productId,
+        isPrincipal: false,
+      },
+    })
+
+    return true
+  }
 }

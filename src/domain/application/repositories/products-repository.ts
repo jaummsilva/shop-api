@@ -19,4 +19,6 @@ export interface ProductsRepository {
 
   findById(productId: string): Promise<Product | null>
   delete(productId: string): Promise<boolean>
+  deleteProductImagesWherePrincipal(productId: string): Promise<boolean>
+  deleteProductImagesWhereOptional(productId: string): Promise<boolean>
 }
