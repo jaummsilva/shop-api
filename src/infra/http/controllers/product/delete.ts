@@ -9,31 +9,31 @@ import { PATH_TEMP_FILES } from '@/paths'
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
 import type { HttpServer } from '../../http-server'
-import { makeUserDeleteUseCase } from './factories/make-delete'
+import { makeDeleteProductUseCase } from './factories/make-delete-product-use-case'
 
-export class UserDeleteController {
+export class ProductDeleteController {
   constructor(
     private httpServer: HttpServer,
     private bodyValidation: Validation<{
-      userId: string
+      productId: string
     }>,
   ) {}
 
   async handle(request: HttpRequest, reply: HttpResponse) {
     try {
-      const { userId } = this.bodyValidation.parse(request.params)
+      const { productId } = this.bodyValidation.parse(request.params)
 
-      const userDeleteUsersCase = makeUserDeleteUseCase()
+      const productDeleteCase = makeDeleteProductUseCase()
 
-      const result = await userDeleteUsersCase.execute({
-        userId,
+      const result = await productDeleteCase.execute({
+        productId,
       })
 
       if (result.isLeft()) {
         const error = result.value
 
         if (error instanceof ResourceNotFoundError) {
-          return reply.status(409).json({
+          return reply.status(400).json({
             message: error.message,
           })
         }
@@ -57,7 +57,7 @@ export class UserDeleteController {
         }
       }
 
-      const principalDir = path.join(PATH_TEMP_FILES, userId)
+      const principalDir = path.join(PATH_TEMP_FILES, productId)
       removeFolder(principalDir)
 
       return reply.status(204).send()

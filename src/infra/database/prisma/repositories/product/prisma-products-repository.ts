@@ -108,16 +108,10 @@ export class PrismaProductsRepository implements ProductsRepository {
     return { products: productsMapped, meta }
   }
 
-  async delete(userId: string) {
-    await prisma.user.findUnique({
+  async delete(productId: string) {
+    await prisma.product.delete({
       where: {
-        id: userId,
-      },
-    })
-
-    await prisma.user.delete({
-      where: {
-        id: userId,
+        id: productId,
       },
     })
 
