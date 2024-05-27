@@ -11,7 +11,6 @@ export class PrismaProductMapper {
   ): DomainProduct {
     return DomainProduct.create(
       {
-        id: raw.id,
         name: raw.name,
         description: raw.description !== null ? raw.description : undefined,
         price: Number(raw.price),

@@ -16,7 +16,7 @@ export interface ProductsRepository {
   findMany(
     params: FindManyParams,
   ): Promise<{ products: Product[]; meta: MetaResponse }>
-
+  findStoreMany(query: string): Promise<{ products: Product[] }>
   findById(productId: string): Promise<Product | null>
   delete(productId: string): Promise<boolean>
   deleteProductImagesWherePrincipal(productId: string): Promise<boolean>

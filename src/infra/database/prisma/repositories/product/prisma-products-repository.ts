@@ -108,6 +108,49 @@ export class PrismaProductsRepository implements ProductsRepository {
     return { products: productsMapped, meta }
   }
 
+  async findStoreMany(query: string) {
+    let take
+
+    if (query && query !== '') {
+      take = undefined
+    } else {
+      take = 15
+    }
+
+    const [products] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+        take, // will be undefined if query is provided, 15 if not
+        include: {
+          productImages: true,
+        },
+      }),
+    ])
+
+    const productsMapped = products.map((product) =>
+      PrismaProductMapper.toDomain({
+        ...product,
+      }),
+    )
+
+    return { products: productsMapped }
+  }
+
   async delete(productId: string) {
     await prisma.product.delete({
       where: {

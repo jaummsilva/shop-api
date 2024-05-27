@@ -77,6 +77,7 @@ CREATE TABLE "carts" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "status" "StatusCart" NOT NULL DEFAULT 'ABERTO',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "carts_pkey" PRIMARY KEY ("id")
 );
@@ -87,6 +88,7 @@ CREATE TABLE "cart_items" (
     "cart_id" TEXT NOT NULL,
     "product_id" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "cart_items_pkey" PRIMARY KEY ("id")
 );
