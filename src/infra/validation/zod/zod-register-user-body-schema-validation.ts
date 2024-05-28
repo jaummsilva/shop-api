@@ -4,18 +4,18 @@ import type { Validation } from '@/core/validation/validation'
 
 // Definição do esquema Zod para o corpo de registro de usuário
 const userRegisterBodySchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  name: z.string(),
+  email: z.string().email().max(255),
+  password: z.string().min(6).max(100),
+  name: z.string().min(3).max(255),
   role: z.enum(['ADMIN', 'MEMBER']),
-  phone: z.string(),
+  phone: z.string().max(15),
   photoPath: z
     .object({
       file: z.object({
-        type: z.string(), // type is required
+        type: z.string(),
       }),
-      filename: z.string(), // filename is required
-      mimetype: z.string(), // mimetype is required
+      filename: z.string(),
+      mimetype: z.string(),
     })
     .refine(({ mimetype }) => {
       // Check file type

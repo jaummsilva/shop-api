@@ -5,8 +5,8 @@ import type { Validation } from '@/core/validation/validation'
 // Definição do esquema Zod para o corpo de registro de usuário
 const productUpdateBodySchema = z.object({
   productId: z.string().uuid(),
-  name: z.string().min(3),
-  description: z.string().optional(),
+  name: z.string().min(3).max(255),
+  description: z.string().max(255).optional(),
   price: z.number(),
   photoPrincipal: z
     .object({

@@ -4,28 +4,31 @@ import type { Validation } from '@/core/validation/validation'
 
 const userUpdateBodySchema = z.object({
   userId: z.string().uuid(),
-  email: z.string().email(),
+  email: z.string().email().max(255),
   password: z
     .string()
     .refine(
       (value) =>
         value.length === 0 ||
-        (value.length >= 6 && value.trim().length === value.length),
+        (value.length >= 6 &&
+          value.length <= 100 &&
+          value.trim().length === value.length),
       {
-        message: 'Password must be at least 6 characters long.',
+        message:
+          'Password must be between 6 and 100 characters long, and should not contain leading or trailing spaces.',
       },
     ),
-  name: z.string(),
+  name: z.string().min(3).max(255),
   role: z.enum(['ADMIN', 'MEMBER']),
   status: z.enum(['S', 'N']),
-  phone: z.string(),
+  phone: z.string().max(15),
   photoPath: z
     .object({
       file: z.object({
-        type: z.string(), // type is required
+        type: z.string(),
       }),
-      filename: z.string(), // filename is required
-      mimetype: z.string(), // mimetype is required
+      filename: z.string(),
+      mimetype: z.string(),
     })
     .refine(({ mimetype }) => {
       // Check file type
