@@ -1,9 +1,9 @@
 import { ZodAuthenticateBodySchemaValidation } from '@/infra/validation/zod/zod-authenticate-body-schema-validation.ts'
 
+import { AdminAuthenticateController } from '../../controllers/auth/admin-authenticate'
 import { AuthenticateController } from '../../controllers/auth/authenticate'
 import { RefreshTokenController } from '../../controllers/auth/refresh-token'
 import type { HttpServer } from '../../http-server'
-import { AdminAuthenticateController } from '../../controllers/auth/admin-authenticate'
 
 export class AuthRoutes {
   constructor(private httpServer: HttpServer) {}

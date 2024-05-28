@@ -8,8 +8,11 @@ export class PrismaCartItemMapper {
     return DomainCartItem.create(
       {
         cartId: new UniqueEntityID(raw.cartId),
-        productId: new UniqueEntityID(raw.productId),
+        productId: raw.productId
+          ? new UniqueEntityID(raw.productId)
+          : undefined,
         quantity: raw.quantity,
+        productName: raw.productName,
       },
       new UniqueEntityID(raw.id),
     )

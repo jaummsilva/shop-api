@@ -23,21 +23,21 @@ enum StatusUser {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  phone        String
-  role         Role     @default(MEMBER)
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  orders       Order[]
-  cart         Cart?
-  imageOriginalName    String   @map("image_original_name")
-  imageFakeName    String   @map("image_fake_name")
-  imageType    String   @map("image_type") @default("")
-  birthdate    DateTime @map("birthdate")
-  status    StatusUser @default(S)
+  id                String     @id @default(uuid())
+  name              String
+  email             String     @unique
+  phone             String
+  role              Role       @default(MEMBER)
+  passwordHash      String     @map("password_hash")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+  orders            Order[]
+  carts             Cart[]   
+  imageOriginalName String     @map("image_original_name")
+  imageFakeName     String     @map("image_fake_name")
+  imageType         String     @default("") @map("image_type")
+  birthdate         DateTime   @map("birthdate")
+  status            StatusUser @default(S)
 
   @@map("users")
 }
@@ -57,13 +57,13 @@ model Product {
 }
 
 model ProductImages {
-  id          String  @id @default(uuid())
-  imageOriginalName    String   @map("image_original_name")
-  imageFakeName    String   @map("image_fake_name")
-  imageType    String   @map("image_type") @default("")
-  product     Product @relation(fields: [productId], references: [id])
-  productId   String  @map("product_id")
-  isPrincipal Boolean @map("is_principal")
+  id                String  @id @default(uuid())
+  imageOriginalName String  @map("image_original_name")
+  imageFakeName     String  @map("image_fake_name")
+  imageType         String  @default("") @map("image_type")
+  product           Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId         String  @map("product_id")
+  isPrincipal       Boolean @map("is_principal")
 
   @@map("product_images")
 }
@@ -72,8 +72,8 @@ model Order {
   id         String      @id @default(uuid())
   createdAt  DateTime    @default(now()) @map("created_at")
   totalPrice Float       @map("price_total")
-  user       User        @relation(fields: [userId], references: [id])
-  userId     String      @map("user_id")
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?      @map("user_id")
   orderItems OrderItem[]
 
   @@map("orders")
@@ -81,11 +81,12 @@ model Order {
 
 model OrderItem {
   id           String  @id @default(uuid())
-  order        Order   @relation(fields: [orderId], references: [id])
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId      String  @map("order_id")
-  product      Product @relation(fields: [productId], references: [id])
-  productId    String  @map("product_id")
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId    String?  @map("product_id")
   quantity     Int
+  productName String @map("product_name")
   productPrice Float   @map("product_price")
   totalPrice   Float   @map("price_total")
 
@@ -94,23 +95,24 @@ model OrderItem {
 
 model Cart {
   id        String     @id @default(uuid())
-  user      User       @relation(fields: [userId], references: [id])
-  userId    String     @unique @map("user_id")
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?     @map("user_id")
   cartItems CartItem[]
   status    StatusCart @default(ABERTO)
-  createdAt  DateTime    @default(now()) @map("created_at")
+  createdAt DateTime   @default(now()) @map("created_at")
 
   @@map("carts")
 }
 
 model CartItem {
-  id        String  @id @default(uuid())
-  cart      Cart    @relation(fields: [cartId], references: [id])
-  cartId    String  @map("cart_id")
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @map("product_id")
+  id        String   @id @default(uuid())
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId    String   @map("cart_id")
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?   @map("product_id")
   quantity  Int
-  createdAt  DateTime    @default(now()) @map("created_at")
+  productName String @map("product_name")
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("cart_items")
 }

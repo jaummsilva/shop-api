@@ -11,7 +11,17 @@ export class PrismaCartsRepository implements CartsRepository {
     const cart = await prisma.cart.create({
       data: {
         status: data.status,
-        userId: data.userId.toString(),
+        userId: data.userId ? data.userId.toString() : null,
+        cartItems: {
+          create: data.cartItems.map((cartItem) => ({
+            id: cartItem.id.toString(),
+            productId: cartItem.productId
+              ? cartItem.productId.toString()
+              : null,
+            quantity: cartItem.quantity,
+            productName: cartItem.productName,
+          })),
+        },
       },
       include: {
         cartItems: true,
@@ -25,7 +35,8 @@ export class PrismaCartsRepository implements CartsRepository {
       data: {
         quantity: data.quantity,
         cartId: data.cartId.toString(),
-        productId: data.productId.toString(),
+        productId: data.productId ? data.productId.toString() : null,
+        productName: data.productName,
       },
     })
 
@@ -40,7 +51,6 @@ export class PrismaCartsRepository implements CartsRepository {
       where: { id: data.id.toString() },
       data: {
         status: data.status,
-        userId: data.userId.toString(),
       },
       include: {
         cartItems: true,
@@ -103,7 +113,7 @@ export class PrismaCartsRepository implements CartsRepository {
             createdAt: 'desc',
           },
           include: {
-            product: true, // Assuming each cart item has a related product with a price
+            product: true,
           },
         },
       },
@@ -116,8 +126,11 @@ export class PrismaCartsRepository implements CartsRepository {
     // Calculate total price
     const totalPrice = cart.cartItems.reduce((total, cartItem) => {
       // Convert Decimal to number
-      const price = cartItem.product.price.toNumber()
-      return total + price * cartItem.quantity
+      if (cartItem.product) {
+        const price = cartItem.product.price.toNumber()
+        return total + price * cartItem.quantity
+      }
+      return total
     }, 0)
 
     const cartMapped = PrismaCartMapper.toDomain({

@@ -100,8 +100,6 @@ export class ProductRoutes {
       getproductImagesBodyController.handle.bind(
         getproductImagesBodyController,
       ),
-      isPrivateRoute,
-      isAdmin,
     )
 
     const zodProductDeleteBodySchemaValidation =

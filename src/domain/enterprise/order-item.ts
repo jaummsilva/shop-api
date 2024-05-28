@@ -1,15 +1,12 @@
 import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-import type { Order } from './order'
-import type { Product } from './product'
-
 type OrderItemProps = {
-  id?: string
-  order: Order
-  product: Product
+  orderId: UniqueEntityID
+  productId?: UniqueEntityID
   quantity: number
   productPrice: number
+  productName: string
   totalPrice: number
 }
 
@@ -23,20 +20,20 @@ export class OrderItem extends Entity<OrderItemProps> {
     return orderItem
   }
 
-  get order() {
-    return this.props.order
+  get orderId() {
+    return this.props.orderId
   }
 
-  set order(order: Order) {
-    this.props.order = order
+  get productName() {
+    return this.props.productName
   }
 
-  get product() {
-    return this.props.product
+  set productName(productName: string) {
+    this.props.productName = productName
   }
 
-  set product(product: Product) {
-    this.props.product = product
+  get productId() {
+    return this.props.productId
   }
 
   get quantity() {

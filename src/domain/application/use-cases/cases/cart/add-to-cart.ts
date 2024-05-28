@@ -44,18 +44,10 @@ export class AddToCartUseCase {
         })
 
         cart = await this.cartsRepository.create(cartCreated)
-
-        const cartItem = CartItem.create({
-          cartId: cart.id,
-          productId: new UniqueEntityID(productId),
-          quantity,
-        })
-
-        await this.cartsRepository.createCartItem(cartItem)
       }
 
       const existingItemIndex = cart.cartItems.findIndex(
-        (item) => item.productId.toString() === productId,
+        (item) => item.productId?.toString() === productId,
       )
 
       if (existingItemIndex !== -1) {
@@ -74,6 +66,7 @@ export class AddToCartUseCase {
         const newCartItem = CartItem.create({
           cartId: cart.id,
           productId: product.id,
+          productName: product.name,
           quantity,
         })
 

@@ -33,10 +33,6 @@ export class FastifyAdapter implements HttpServer {
     this.app.register(fastifyMultipart, { attachFieldsToBody: true })
     this.app.register(fastifyJwt, {
       secret: env.JWT_SECRET,
-      cookie: {
-        cookieName: 'refreshToken',
-        signed: false,
-      },
       sign: {
         expiresIn: '1h',
       },
@@ -106,20 +102,14 @@ export class FastifyAdapter implements HttpServer {
 
   signJwt(sub: string, role: 'ADMIN' | 'MEMBER') {
     const tokenExpiresIn = '1h' // Tempo de expiração do token de acesso
-    const refreshTokenExpiresIn = '7d' // Tempo de expiração do refresh token
 
     const token = this.app.jwt.sign(
       { sub, role },
       { expiresIn: tokenExpiresIn },
     )
-    const refreshToken = this.app.jwt.sign(
-      { sub, role },
-      { expiresIn: refreshTokenExpiresIn },
-    )
 
     return {
       token,
-      refreshToken,
     }
   }
 }

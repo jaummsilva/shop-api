@@ -36,22 +36,11 @@ export class AuthenticateController {
       } else {
         const { user } = result.value
 
-        const { token, refreshToken } = this.httpServer.signJwt(
-          user.id.toString(),
-          user.role,
-        )
+        const { token } = this.httpServer.signJwt(user.id.toString(), user.role)
 
-        return reply
-          .setCookie('refreshToken', refreshToken, {
-            path: '/',
-            secure: true,
-            sameSite: true,
-            httpOnly: true,
-          })
-          .status(200)
-          .json({
-            token,
-          })
+        return reply.status(200).json({
+          token,
+        })
       }
     } catch (error) {
       const validationError = fromError(error)

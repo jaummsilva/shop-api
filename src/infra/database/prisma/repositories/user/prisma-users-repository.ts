@@ -134,12 +134,6 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async delete(userId: string) {
-    await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    })
-
     await prisma.user.delete({
       where: {
         id: userId,

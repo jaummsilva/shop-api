@@ -6,7 +6,6 @@ export class ProfileRoutes {
 
   async init() {
     const isPrivateRoute = true
-    const isAdmin = true
     const profileController = new ProfileController()
 
     this.httpServer.register(
@@ -14,7 +13,6 @@ export class ProfileRoutes {
       '/profile',
       profileController.handle.bind(profileController),
       isPrivateRoute,
-      isAdmin,
     )
   }
 }

@@ -1,15 +1,12 @@
-import type { OrderItem } from '@prisma/client'
-
 import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-import type { User } from './user'
+import type { OrderItem } from './order-item'
 
 type OrderProps = {
-  id?: string
   createdAt?: Date
   totalPrice: number
-  user: User
+  userId?: UniqueEntityID
   orderItems: OrderItem[]
 }
 
@@ -35,12 +32,8 @@ export class Order extends Entity<OrderProps> {
     this.props.totalPrice = totalPrice
   }
 
-  get user() {
-    return this.props.user
-  }
-
-  set user(user: User) {
-    this.props.user = user
+  get userId() {
+    return this.props.userId
   }
 
   get orderItems() {

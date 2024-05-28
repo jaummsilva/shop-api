@@ -18,15 +18,18 @@ export class PrismaCartMapper {
     return DomainCart.create(
       {
         status: mapPrismaStatusToDomainStatus(raw.status),
-        userId: new UniqueEntityID(raw.userId),
+        userId: raw.userId ? new UniqueEntityID(raw.userId) : undefined,
         totalItems: raw.totalItems ?? 0,
         totalPrice: raw.totalPrice ?? 0,
         cartItems: raw.cartItems.map((cartItem) =>
           DomainCartItems.create(
             {
               cartId: new UniqueEntityID(cartItem.cartId),
-              productId: new UniqueEntityID(cartItem.productId),
+              productId: cartItem.productId
+                ? new UniqueEntityID(cartItem.productId)
+                : undefined,
               quantity: cartItem.quantity,
+              productName: cartItem.productName,
             },
             new UniqueEntityID(raw.id),
           ),

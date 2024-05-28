@@ -3,8 +3,9 @@ import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 type CartItemProps = {
   cartId: UniqueEntityID
-  productId: UniqueEntityID
+  productId?: UniqueEntityID
   quantity: number
+  productName: string
 }
 
 export class CartItem extends Entity<CartItemProps> {
@@ -23,6 +24,14 @@ export class CartItem extends Entity<CartItemProps> {
     return cartItem
   }
 
+  get productName() {
+    return this.props.productName
+  }
+
+  set productName(productName: string) {
+    this.props.productName = productName
+  }
+
   get cartId() {
     return this.props.cartId
   }
@@ -31,7 +40,7 @@ export class CartItem extends Entity<CartItemProps> {
     return this.props.productId
   }
 
-  set productId(productId: UniqueEntityID) {
+  set productId(productId: UniqueEntityID | undefined) {
     this.props.productId = productId
   }
 

@@ -9,7 +9,7 @@ export enum StatusCart {
 }
 
 type CartProps = {
-  userId: UniqueEntityID
+  userId?: UniqueEntityID
   cartItems: CartItem[]
   status: StatusCart
   totalItems: number
