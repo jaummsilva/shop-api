@@ -40,7 +40,7 @@ export function generateOrderEmailTemplate(order: Order) {
               <tr>
                 <td style="border: 1px solid #ddd; padding: 8px;">${item.productName}</td>
                 <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">R$ ${item.totalPrice.toFixed(2)}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">R$ ${item.totalPrice.toFixed(2).replace('.', ',')}</td>
               </tr>
             `,
             )
@@ -49,7 +49,7 @@ export function generateOrderEmailTemplate(order: Order) {
       </table>
 
       <div style="margin-top: 20px;">
-        <h3><strong>Total:</strong> R$ ${order.totalPrice.toFixed(2)}</h3>
+        <h3><strong>Total:</strong> R$ ${order.totalPrice.toFixed(2).replace('.', ',')}</h3>
         <p>Atenciosamente,<br>Equipe de Vendas</p>
       </div>
     </div>
