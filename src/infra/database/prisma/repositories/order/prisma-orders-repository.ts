@@ -11,6 +11,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
         id: data.id.toString(),
         totalPrice: data.totalPrice,
         userId: data.userId ? data.userId.toString() : null,
+        userName: data.userName ? data.userName : null,
         createdAt: data.createdAt ?? new Date(),
         orderItems: {
           create: data.orderItems.map((orderItem) => ({
@@ -27,6 +28,7 @@ export class PrismaOrdersRepository implements OrdersRepository {
       },
       include: {
         orderItems: true,
+        user: true,
       },
     })
     return PrismaOrderMapper.toDomain(order)

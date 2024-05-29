@@ -4,9 +4,11 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import type { CartsRepository } from '@/domain/application/repositories/carts-repository'
 import type { OrdersRepository } from '@/domain/application/repositories/orders-repository'
 import type { ProductsRepository } from '@/domain/application/repositories/products-repository'
+import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
 import { StatusCart } from '@/domain/enterprise/cart'
 import { Order } from '@/domain/enterprise/order'
 import { OrderItem } from '@/domain/enterprise/order-item'
+import type { User } from '@/domain/enterprise/user'
 
 interface OrderRegisterUseCaseRequest {
   userId: string
@@ -14,7 +16,7 @@ interface OrderRegisterUseCaseRequest {
 
 type OrderRegisterUseCaseResponse = Either<
   ResourceNotFoundError,
-  { order: Order }
+  { order: Order; users: User[] }
 >
 
 export class OrderRegisterUseCase {
@@ -22,6 +24,7 @@ export class OrderRegisterUseCase {
     private cartsRepository: CartsRepository,
     private orderRepository: OrdersRepository,
     private productsRepository: ProductsRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({
@@ -63,12 +66,14 @@ export class OrderRegisterUseCase {
         }
       }
 
+      const user = await this.usersRepository.findById(userId)
       const order = Order.create(
         {
           userId: new UniqueEntityID(userId),
           totalPrice,
           orderItems,
           createdAt: new Date(),
+          userName: user?.name,
         },
         orderId,
       )
@@ -79,7 +84,9 @@ export class OrderRegisterUseCase {
 
       await this.cartsRepository.save(cart)
 
-      return right({ order })
+      const users = await this.usersRepository.getByAdmin()
+
+      return right({ order, users })
     } catch (error) {
       return left(new ResourceNotFoundError())
     }

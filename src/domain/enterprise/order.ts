@@ -7,6 +7,7 @@ type OrderProps = {
   createdAt?: Date
   totalPrice: number
   userId?: UniqueEntityID
+  userName?: string
   orderItems: OrderItem[]
 }
 
@@ -38,6 +39,10 @@ export class Order extends Entity<OrderProps> {
 
   get orderItems() {
     return this.props.orderItems
+  }
+
+  get userName() {
+    return this.props.userName
   }
 
   set orderItems(orderItems: OrderItem[]) {

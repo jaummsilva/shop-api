@@ -19,6 +19,7 @@ export class PrismaCartMapper {
       {
         status: mapPrismaStatusToDomainStatus(raw.status),
         userId: raw.userId ? new UniqueEntityID(raw.userId) : undefined,
+        userName: raw.userName ? raw.userName : undefined,
         totalItems: raw.totalItems ?? 0,
         totalPrice: raw.totalPrice ?? 0,
         cartItems: raw.cartItems.map((cartItem) =>

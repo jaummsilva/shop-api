@@ -5,9 +5,12 @@ export class CartsPresenter {
     return {
       id: cart.id.toString(),
       status: cart.status,
+      userName: cart.userName ?? null,
       cartItems: cart.cartItems.map((cartItem) => ({
         id: cartItem.id.toString(),
-        productId: cartItem.productId.toString(),
+        productId: cartItem.productId
+          ? cartItem.productId.toString()
+          : undefined,
         quantity: cartItem.quantity,
       })),
       totalItems: cart.totalItems ?? 0,

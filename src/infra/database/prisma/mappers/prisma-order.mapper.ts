@@ -18,6 +18,7 @@ export class PrismaOrderMapper {
         userId: raw.userId ? new UniqueEntityID(raw.userId) : undefined,
         totalPrice: raw.totalPrice ?? 0,
         createdAt: raw.createdAt ?? new Date(),
+        userName: raw.userName ? raw.userName : undefined,
         orderItems: raw.orderItems.map((orderItem) =>
           DomainOrderItems.create(
             {

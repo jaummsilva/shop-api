@@ -3,6 +3,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import type { CartsRepository } from '@/domain/application/repositories/carts-repository'
 import type { ProductsRepository } from '@/domain/application/repositories/products-repository'
+import type { UsersRepository } from "@/domain/application/repositories/users-repository'"
 import { Cart, StatusCart } from '@/domain/enterprise/cart'
 import { CartItem } from '@/domain/enterprise/cart-item'
 
@@ -18,6 +19,7 @@ export class AddToCartUseCase {
   constructor(
     private cartsRepository: CartsRepository,
     private productsRepository: ProductsRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({
@@ -34,10 +36,12 @@ export class AddToCartUseCase {
 
       let cart = await this.cartsRepository.findOpenCartByUser(userId)
 
+      const user = await this.usersRepository.findById(userId)
       if (!cart) {
         const cartCreated = Cart.create({
           status: StatusCart.ABERTO,
           userId: new UniqueEntityID(userId),
+          userName: user?.name,
           totalItems: 0,
           totalPrice: 0,
           cartItems: [],

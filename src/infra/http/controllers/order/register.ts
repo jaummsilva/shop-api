@@ -4,14 +4,15 @@ import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
+import { sendOrderConfirmationEmail } from '../../nodemailer/send-order-confirmation-email'
 import { makeOrdersRegisterUseCase } from './factories/make-orders-register-use-case'
 
 export class OrderRegisterController {
   async handle(request: HttpRequest, reply: HttpResponse) {
     try {
-      const productDeleteCase = makeOrdersRegisterUseCase()
+      const ordersRegisterCase = makeOrdersRegisterUseCase()
 
-      const result = await productDeleteCase.execute({
+      const result = await ordersRegisterCase.execute({
         userId: request.user.sub,
       })
 
@@ -24,7 +25,15 @@ export class OrderRegisterController {
           })
         }
       }
+
       if (result.isRight()) {
+        const userEmails = result.value.users
+          .map((user) => user.email)
+          .join(',')
+
+        // Enviar email para os administradores com o pedido
+        await sendOrderConfirmationEmail(result.value.order, userEmails)
+
         return reply.status(201).json({
           orderId: result.value.order.id.toString(),
         })

@@ -23,6 +23,7 @@
     "@rocketseat/eslint-config": "2.2.2",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "^20.12.8",
+    "@types/nodemailer": "6.4.15",
     "@types/supertest": "6.0.2",
     "@typescript-eslint/parser": "6.21.0",
     "@vitest/coverage-v8": "1.6.0",
@@ -48,6 +49,7 @@
     "dotenv": "16.4.5",
     "fastify": "^4.26.2",
     "i": "0.3.7",
+    "nodemailer": "6.9.13",
     "npm": "10.7.0",
     "zod": "3.23.6",
     "zod-validation-error": "3.2.0"

@@ -32,7 +32,7 @@ model User {
   createdAt         DateTime   @default(now()) @map("created_at")
   updatedAt         DateTime   @updatedAt @map("updated_at")
   orders            Order[]
-  carts             Cart[]   
+  carts             Cart[]
   imageOriginalName String     @map("image_original_name")
   imageFakeName     String     @map("image_fake_name")
   imageType         String     @default("") @map("image_type")
@@ -72,31 +72,33 @@ model Order {
   id         String      @id @default(uuid())
   createdAt  DateTime    @default(now()) @map("created_at")
   totalPrice Float       @map("price_total")
-  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId     String?      @map("user_id")
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?     @map("user_id")
+  userName   String?     @map("user_name")
   orderItems OrderItem[]
 
   @@map("orders")
 }
 
 model OrderItem {
-  id           String  @id @default(uuid())
-  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId      String  @map("order_id")
+  id           String   @id @default(uuid())
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      String   @map("order_id")
   product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
   productId    String?  @map("product_id")
   quantity     Int
-  productName String @map("product_name")
-  productPrice Float   @map("product_price")
-  totalPrice   Float   @map("price_total")
+  productName  String   @map("product_name")
+  productPrice Float    @map("product_price")
+  totalPrice   Float    @map("price_total")
 
   @@map("order_items")
 }
 
 model Cart {
   id        String     @id @default(uuid())
-  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId    String?     @map("user_id")
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?    @map("user_id")
+  userName   String?     @map("user_name")
   cartItems CartItem[]
   status    StatusCart @default(ABERTO)
   createdAt DateTime   @default(now()) @map("created_at")
@@ -105,14 +107,14 @@ model Cart {
 }
 
 model CartItem {
-  id        String   @id @default(uuid())
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  cartId    String   @map("cart_id")
-  product   Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
-  productId String?   @map("product_id")
-  quantity  Int
-  productName String @map("product_name")
-  createdAt DateTime @default(now()) @map("created_at")
+  id          String   @id @default(uuid())
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId      String   @map("cart_id")
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId   String?  @map("product_id")
+  quantity    Int
+  productName String   @map("product_name")
+  createdAt   DateTime @default(now()) @map("created_at")
 
   @@map("cart_items")
 }

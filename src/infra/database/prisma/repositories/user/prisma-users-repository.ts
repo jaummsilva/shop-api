@@ -84,6 +84,21 @@ export class PrismaUsersRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user)
   }
 
+  async getByAdmin() {
+    const users = await prisma.user.findMany({
+      where: {
+        role: 'ADMIN',
+      },
+    })
+
+    const usersMapped = users.map((user) =>
+      PrismaUserMapper.toDomain({
+        ...user,
+      }),
+    )
+    return usersMapped
+  }
+
   async findMany(params: FindManyParams) {
     const { name = '', page = 1, perPage = 10 } = params
 

@@ -108,8 +108,6 @@ export class UserRoutes {
       'get',
       '/user/:userId/get-image/:imageName',
       getImageUserController.handle.bind(getImageUserController),
-      isPrivateRoute,
-      isAdmin,
     )
   }
 }

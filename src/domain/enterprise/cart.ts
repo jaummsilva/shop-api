@@ -10,6 +10,7 @@ export enum StatusCart {
 
 type CartProps = {
   userId?: UniqueEntityID
+  userName?: string
   cartItems: CartItem[]
   status: StatusCart
   totalItems: number
@@ -58,5 +59,9 @@ export class Cart extends Entity<CartProps> {
 
   set status(status: StatusCart) {
     this.props.status = status
+  }
+
+  get userName() {
+    return this.props.userName
   }
 }

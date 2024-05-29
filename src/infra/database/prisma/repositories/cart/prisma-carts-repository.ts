@@ -12,6 +12,7 @@ export class PrismaCartsRepository implements CartsRepository {
       data: {
         status: data.status,
         userId: data.userId ? data.userId.toString() : null,
+        userName: data.userName ? data.userName : null,
         cartItems: {
           create: data.cartItems.map((cartItem) => ({
             id: cartItem.id.toString(),
@@ -66,6 +67,7 @@ export class PrismaCartsRepository implements CartsRepository {
         productId,
         cart: {
           userId,
+          status: 'ABERTO',
         },
       },
     })
