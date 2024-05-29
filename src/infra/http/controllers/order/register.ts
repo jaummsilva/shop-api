@@ -1,13 +1,16 @@
 import { fromError } from 'zod-validation-error'
 
+import type { EmailProvider } from '@/core/email/provider'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
-import { sendOrderConfirmationEmail } from '../../nodemailer/send-order-confirmation-email'
+import { sendOrderConfirmationEmail } from '../../nodemailer/order/send-order-confirmation-email'
 import { makeOrdersRegisterUseCase } from './factories/make-orders-register-use-case'
 
 export class OrderRegisterController {
+  constructor(private emailProvider: EmailProvider) {}
+
   async handle(request: HttpRequest, reply: HttpResponse) {
     try {
       const ordersRegisterCase = makeOrdersRegisterUseCase()
@@ -32,7 +35,11 @@ export class OrderRegisterController {
           .join(',')
 
         // Enviar email para os administradores com o pedido
-        await sendOrderConfirmationEmail(result.value.order, userEmails)
+        await sendOrderConfirmationEmail(
+          this.emailProvider,
+          result.value.order,
+          userEmails,
+        )
 
         return reply.status(201).json({
           orderId: result.value.order.id.toString(),
