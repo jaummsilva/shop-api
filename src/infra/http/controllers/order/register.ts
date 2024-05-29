@@ -3,9 +3,9 @@ import { fromError } from 'zod-validation-error'
 import type { EmailProvider } from '@/core/email/provider'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
+import { sendOrderConfirmationEmail } from '../../email/order/send-order-confirmation-email'
 import type { HttpRequest } from '../../http-request'
 import type { HttpResponse } from '../../http-response'
-import { sendOrderConfirmationEmail } from '../../nodemailer/order/send-order-confirmation-email'
 import { makeOrdersRegisterUseCase } from './factories/make-orders-register-use-case'
 
 export class OrderRegisterController {
