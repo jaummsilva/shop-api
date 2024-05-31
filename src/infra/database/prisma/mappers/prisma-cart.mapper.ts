@@ -7,6 +7,8 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Cart as DomainCart } from '@/domain/enterprise/cart'
 import { CartItem as DomainCartItems } from '@/domain/enterprise/cart-item'
 
+import { mapPrismaStatusToDomainStatus } from './prisma-status-cart.mapper'
+
 export class PrismaCartMapper {
   static toDomain(
     raw: PrismaCart & {
@@ -38,21 +40,5 @@ export class PrismaCartMapper {
       },
       new UniqueEntityID(raw.id),
     )
-  }
-}
-
-enum StatusCart {
-  ABERTO = 'ABERTO',
-  FECHADO = 'FECHADO',
-}
-
-function mapPrismaStatusToDomainStatus(prismaStatus: string): StatusCart {
-  switch (prismaStatus) {
-    case 'ABERTO':
-      return StatusCart.ABERTO
-    case 'FECHADO':
-      return StatusCart.FECHADO
-    default:
-      throw new Error(`Unknown status: ${prismaStatus}`)
   }
 }
