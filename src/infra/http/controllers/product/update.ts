@@ -21,6 +21,7 @@ export class ProductUpdateController {
       description?: string
       price: number
       photoPrincipal?: ImagePropsValidation
+      deleteImagesOptional: string
       photos?: ImagePropsValidation[]
     }>,
   ) {}
@@ -36,12 +37,14 @@ export class ProductUpdateController {
         photos0,
         photos1,
         photos2,
+        deleteImagesOptional,
       } = request.body as ProductUpdateBodyMultiPartsProps
 
       const productIdValue = productId.value
       const nameValue = name.value
       const descriptionValue = description?.value
       const priceValue = Number(price.value)
+      const deleteImagesOptionalValue = deleteImagesOptional.value
 
       const productImages: ProductImages[] = []
       let principalImage: ImagePropsValidation | undefined
@@ -98,6 +101,7 @@ export class ProductUpdateController {
         price: priceValue,
         photoPrincipal: principalImage,
         photos: additionalPhotos,
+        deleteImagesOptional: deleteImagesOptionalValue,
       })
 
       // Executa o caso de uso para registrar o produto
@@ -108,6 +112,7 @@ export class ProductUpdateController {
         price: priceValue,
         description: descriptionValue,
         productImages,
+        deleteImagesOptional: deleteImagesOptionalValue,
       })
 
       if (result.isRight()) {
@@ -155,18 +160,24 @@ export class ProductUpdateController {
           await saveImage(productImages[0], data, true)
         }
 
-        // Remover e salvar imagens adicionais
-        if (additionalPhotos.length > 0) {
-          const optionalDir = path.join(PATH_TEMP_FILES, productId, 'optional')
+        const optionalDir = path.join(PATH_TEMP_FILES, productId, 'optional')
+
+        if (deleteImagesOptionalValue === 'Y') {
           removeOldImages(optionalDir)
-          for (let i = 0; i < additionalPhotos.length; i++) {
-            if (photos[i]) {
-              const data = await photos[i]!.toBuffer()
-              await saveImage(productImages[i], data, false)
+        } else {
+          // Remover e salvar imagens adicionais
+          if (additionalPhotos.length > 0) {
+            removeOldImages(optionalDir)
+            for (let i = 0; i < additionalPhotos.length; i++) {
+              if (photos[i]) {
+                const data = await photos[i]!.toBuffer()
+                await saveImage(productImages[i], data, false)
+              }
             }
           }
         }
       }
+
       return reply.status(204).send()
     } catch (error) {
       // Captura e manipula o erro de validação

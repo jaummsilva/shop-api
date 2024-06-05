@@ -10,6 +10,7 @@ interface ProductUpdateUseCaseRequest {
   description?: string
   price: number
   productImages?: ProductImages[]
+  deleteImagesOptional: string
 }
 
 type ProductUpdateUseCaseResponse = Either<
@@ -26,6 +27,7 @@ export class ProductUpdateUseCase {
     description,
     price,
     productImages,
+    deleteImagesOptional,
   }: ProductUpdateUseCaseRequest): Promise<ProductUpdateUseCaseResponse> {
     const productExists = await this.productsRepository.findById(productId)
 
@@ -41,6 +43,10 @@ export class ProductUpdateUseCase {
     productExists.price = price
 
     const productUpdated = await this.productsRepository.update(productExists)
+
+    if (deleteImagesOptional === 'Y') {
+      await this.productsRepository.deleteProductImagesWhereOptional(productId)
+    }
 
     if (productImages && productImages.length > 0) {
       const optionalImages = productImages.filter((img) => !img.isPrincipal)
@@ -91,6 +97,13 @@ export class ProductUpdateUseCase {
       }
     }
 
-    return right({ product: productUpdated })
+    const productUpdatedWithProductImages =
+      await this.productsRepository.findById(productId)
+
+    if (!productUpdatedWithProductImages) {
+      return left(new ResourceNotFoundError())
+    }
+
+    return right({ product: productUpdatedWithProductImages })
   }
 }

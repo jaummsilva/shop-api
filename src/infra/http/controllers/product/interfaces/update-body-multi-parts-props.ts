@@ -3,6 +3,7 @@ export interface ProductUpdateBodyMultiPartsProps {
   name: { value: string }
   description?: { value: string }
   price: { value: number }
+  deleteImagesOptional: { value: string }
   photoPrincipal?: {
     value: string
     filename: string

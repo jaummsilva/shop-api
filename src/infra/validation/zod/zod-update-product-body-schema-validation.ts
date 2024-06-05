@@ -27,6 +27,7 @@ const productUpdateBodySchema = z.object({
   price: z.number(),
   photoPrincipal: imagePropsValidationSchema.optional(),
   photos: z.array(imagePropsValidationSchema).optional(),
+  deleteImagesOptional: z.enum(['N', 'Y']),
 })
 
 // Tipo inferido a partir do esquema Zod
