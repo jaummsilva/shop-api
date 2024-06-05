@@ -1,3 +1,6 @@
+import { ZodFetchOrdersQuerySchemaValidation } from '@/infra/validation/zod/zod-fetch-orders-schema-validation'
+
+import { FecthOrdersController } from '../../controllers/order/fetch-orders'
 import { FecthOrdersByUserController } from '../../controllers/order/fetch-orders-by-user'
 import { OrderRegisterController } from '../../controllers/order/register'
 import type { HttpServer } from '../../http-server'
@@ -8,6 +11,7 @@ export class OrderRoutes {
 
   async init() {
     const isPrivateRoute = true
+    const isAdmin = true
     const emailProvider = new NodemailerProvider()
 
     const orderRegisterController = new OrderRegisterController(emailProvider)
@@ -26,6 +30,20 @@ export class OrderRoutes {
       '/store/orders',
       fetchOrdersByUserController.handle.bind(fetchOrdersByUserController),
       isPrivateRoute,
+    )
+
+    const zodFetchOrdersBodySchemaValidation =
+      new ZodFetchOrdersQuerySchemaValidation()
+    const fetchOrdersController = new FecthOrdersController(
+      zodFetchOrdersBodySchemaValidation,
+    )
+
+    this.httpServer.register(
+      'get',
+      '/orders',
+      fetchOrdersController.handle.bind(fetchOrdersController),
+      isPrivateRoute,
+      isAdmin,
     )
   }
 }

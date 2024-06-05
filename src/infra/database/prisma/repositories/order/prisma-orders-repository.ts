@@ -1,4 +1,8 @@
-import type { OrdersRepository } from '@/domain/application/repositories/orders-repository'
+import type {
+  FindManyParams,
+  OrdersRepository,
+} from '@/domain/application/repositories/orders-repository'
+import type { MetaResponse } from '@/domain/application/utils/meta-response'
 import type { Order } from '@/domain/enterprise/order'
 import { prisma } from '@/infra/database/prisma/prisma'
 
@@ -74,5 +78,83 @@ export class PrismaOrdersRepository implements OrdersRepository {
     })
 
     return { orders: ordersMapped }
+  }
+
+  async findMany(params: FindManyParams) {
+    const { query = '', page = 1, perPage = 10 } = params
+
+    const skip = (page - 1) * perPage
+    const take = perPage
+
+    const [orders, totalCount] = await Promise.all([
+      prisma.order.findMany({
+        where: {
+          OR: [
+            {
+              userName: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              id: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+        skip,
+        take,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          orderItems: {
+            include: {
+              product: {
+                select: {
+                  productImages: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      prisma.order.count({
+        where: {
+          OR: [
+            {
+              userName: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+            {
+              id: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      }),
+    ])
+
+    const meta: MetaResponse = {
+      pageIndex: page || 1,
+      perPage,
+      totalCount,
+    }
+
+    const ordersMapped = orders.map((order) => {
+      order.orderItems.forEach((orderItem) => {
+        if (orderItem.product === null) {
+          orderItem.product = { productImages: [] }
+        }
+      })
+      return PrismaOrderMapper.toDomain(order)
+    })
+    return { orders: ordersMapped, meta }
   }
 }

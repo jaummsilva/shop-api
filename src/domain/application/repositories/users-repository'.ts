@@ -14,7 +14,6 @@ export interface UsersRepository {
   findMany(
     params: FindManyParams,
   ): Promise<{ users: User[]; meta: MetaResponse }>
-
   findByEmail(email: string): Promise<User | null>
   findById(userId: string): Promise<User | null>
   getByAdmin(): Promise<User[]>

@@ -23,7 +23,7 @@ export class PrismaProductMapper {
               imageOriginalName: productImage.imageFakeName,
               imageType: productImage.imageType,
               isPrincipal: productImage.isPrincipal,
-              productId: productImage.id,
+              productId: productImage.productId,
             },
             new UniqueEntityID(productImage.id),
           ),

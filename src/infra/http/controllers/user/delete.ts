@@ -23,6 +23,10 @@ export class UserDeleteController {
     try {
       const { userId } = this.bodyValidation.parse(request.params)
 
+      if (userId === request.user.sub) {
+        return reply.status(400).send()
+      }
+
       const userDeleteUsersCase = makeUserDeleteUseCase()
 
       const result = await userDeleteUsersCase.execute({
