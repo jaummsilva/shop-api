@@ -1,12 +1,15 @@
 import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
+import type { ProductImages } from './product-image'
+
 type OrderItemProps = {
   orderId: UniqueEntityID
   productId?: UniqueEntityID
   quantity: number
   productPrice: number
   productName: string
+  productImages: ProductImages[]
   totalPrice: number
 }
 
@@ -26,6 +29,10 @@ export class OrderItem extends Entity<OrderItemProps> {
 
   get productName() {
     return this.props.productName
+  }
+
+  get productImages() {
+    return this.props.productImages
   }
 
   set productName(productName: string) {

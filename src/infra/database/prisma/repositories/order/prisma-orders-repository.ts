@@ -27,10 +27,52 @@ export class PrismaOrdersRepository implements OrdersRepository {
         },
       },
       include: {
-        orderItems: true,
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                productImages: true,
+              },
+            },
+          },
+        },
         user: true,
       },
     })
+
     return PrismaOrderMapper.toDomain(order)
+  }
+
+  async findManyByUser(userId: string) {
+    const orders = await prisma.order.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                productImages: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    const ordersMapped = orders.map((order) => {
+      order.orderItems.forEach((orderItem) => {
+        if (orderItem.product === null) {
+          orderItem.product = { productImages: [] }
+        }
+      })
+      return PrismaOrderMapper.toDomain(order)
+    })
+
+    return { orders: ordersMapped }
   }
 }

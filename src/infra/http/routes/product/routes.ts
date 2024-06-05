@@ -11,7 +11,7 @@ import { FecthProductsController } from '../../controllers/product/fetch-product
 import { FecthStoreProductsController } from '../../controllers/product/fetch-store-products'
 import { GetProductImagesController } from '../../controllers/product/get-image'
 import { GetProductController } from '../../controllers/product/get-product'
-import { ProductRegisterController } from '../../controllers/product/register'
+import { RegisterProductController } from '../../controllers/product/register'
 import { ProductUpdateController } from '../../controllers/product/update'
 import type { HttpServer } from '../../http-server'
 
@@ -62,7 +62,7 @@ export class ProductRoutes {
 
     const zodRegisterProductBodySchemaValidation =
       new ZodProductRegisterBodySchemaValidation()
-    const registerProductController = new ProductRegisterController(
+    const registerProductController = new RegisterProductController(
       zodRegisterProductBodySchemaValidation,
     )
 

@@ -13,6 +13,7 @@ export class PrismaOrderItemMapper {
         productId: raw.productId
           ? new UniqueEntityID(raw.productId)
           : undefined,
+        productPrincipalImageFakeName: 'teste',
         quantity: raw.quantity,
         productName: raw.productName,
       },

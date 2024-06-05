@@ -135,7 +135,7 @@ export class PrismaProductsRepository implements ProductsRepository {
             },
           ],
         },
-        take, // will be undefined if query is provided, 15 if not
+        take,
         include: {
           productImages: true,
         },

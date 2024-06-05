@@ -13,7 +13,7 @@ import type { HttpResponse } from '../../http-response'
 import { makeProductRegisterUseCase } from './factories/make-register-products-use-case'
 import type { ProductRegisterBodyMultiPartsProps } from './interfaces/register-body-multi-parts-props'
 
-export class ProductRegisterController {
+export class RegisterProductController {
   constructor(
     private bodyValidation: Validation<{
       name: string
