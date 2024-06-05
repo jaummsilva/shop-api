@@ -19,34 +19,40 @@ export class PrismaOrderMapper {
       })[]
     },
   ): DomainOrder {
-    return DomainOrder.create({
-      userId: raw.userId ? new UniqueEntityID(raw.userId) : undefined,
-      totalPrice: raw.totalPrice ?? 0,
-      createdAt: raw.createdAt ?? new Date(),
-      userName: raw.userName ?? undefined,
-      orderItems: raw.orderItems.map((orderItem) =>
-        DomainOrderItem.create({
-          orderId: new UniqueEntityID(orderItem.orderId),
-          productPrice: orderItem.productPrice,
-          totalPrice: orderItem.totalPrice,
-          productId: orderItem.productId
-            ? new UniqueEntityID(orderItem.productId)
-            : undefined,
-          quantity: orderItem.quantity,
-          productName: orderItem.productName,
-          productImages: orderItem.product
-            ? orderItem.product.productImages.map((productImage) =>
-                DomainProductImage.create({
-                  imageFakeName: productImage.imageFakeName,
-                  imageOriginalName: productImage.imageOriginalName,
-                  imageType: productImage.imageType,
-                  isPrincipal: productImage.isPrincipal,
-                  productId: productImage.id,
-                }),
-              )
-            : [],
-        }),
-      ),
-    })
+    return DomainOrder.create(
+      {
+        userId: raw.userId ? new UniqueEntityID(raw.userId) : undefined,
+        totalPrice: raw.totalPrice ?? 0,
+        createdAt: raw.createdAt ?? new Date(),
+        userName: raw.userName ?? undefined,
+        orderItems: raw.orderItems.map((orderItem) =>
+          DomainOrderItem.create(
+            {
+              orderId: new UniqueEntityID(orderItem.orderId),
+              productPrice: orderItem.productPrice,
+              totalPrice: orderItem.totalPrice,
+              productId: orderItem.productId
+                ? new UniqueEntityID(orderItem.productId)
+                : undefined,
+              quantity: orderItem.quantity,
+              productName: orderItem.productName,
+              productImages: orderItem.product
+                ? orderItem.product.productImages.map((productImage) =>
+                    DomainProductImage.create({
+                      imageFakeName: productImage.imageFakeName,
+                      imageOriginalName: productImage.imageOriginalName,
+                      imageType: productImage.imageType,
+                      isPrincipal: productImage.isPrincipal,
+                      productId: productImage.id,
+                    }),
+                  )
+                : [],
+            },
+            new UniqueEntityID(orderItem.id),
+          ),
+        ),
+      },
+      new UniqueEntityID(raw.id),
+    )
   }
 }

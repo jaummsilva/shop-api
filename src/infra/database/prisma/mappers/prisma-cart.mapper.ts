@@ -34,7 +34,7 @@ export class PrismaCartMapper {
               quantity: cartItem.quantity,
               productName: cartItem.productName,
             },
-            new UniqueEntityID(raw.id),
+            new UniqueEntityID(cartItem.id),
           ),
         ),
       },
